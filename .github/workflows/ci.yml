@@ -1,0 +1,33 @@
+name: CloudGuard AI CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install dependencies
+        run: uv sync --frozen --all-groups --no-install-project
+
+      - name: Run automated tests
+        run: uv run python -m pytest app/agents app/compliance app/security -q --import-mode=importlib
+
+      - name: Build Docker image
+        run: docker build -t cloudguard-ai:ci .
