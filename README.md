@@ -1,253 +1,232 @@
+# CloudGuard AI 🛡️
 
+### Azure security, compliance, and AI-powered risk analysis — in one place.
 
-# CloudGuard AI
+Cloud infrastructure can be difficult to secure. A misconfigured storage account, an overly permissive role, or an exposed service can create risks that are easy to overlook.
 
-AI-powered Azure Security and Compliance Platform built with FastAPI, Python, Azure SDK, and LangChain.
+**CloudGuard AI** is a security and compliance platform built to help identify those risks in Microsoft Azure.
 
-CloudGuard AI helps organizations assess their Azure infrastructure, identify security misconfigurations, map findings to compliance frameworks, and understand security risks through AI-powered analysis.
+It scans Azure infrastructure, detects common security misconfigurations, maps findings to compliance controls, and uses AI to explain what went wrong and how to fix it.
 
-## Features
+Built with Python, FastAPI, Azure SDK, and LangChain.
 
-- **Azure Integration:** Connect Azure subscriptions using service principal credentials.
+---
 
-- **Security Scanning:** Scan Azure resources for common security misconfigurations.
+## What can it do?
 
-- **AI Security Analysis:** Generate risk explanations, potential impacts, and remediation recommendations.
+- **Scan Azure infrastructure** — Connect an Azure subscription and inspect supported resources for security misconfigurations.
+- **Find security risks** — Detect issues across storage, networking, Key Vault, App Services, and access permissions.
+- **Explain findings with AI** — Understand why an issue matters, its potential impact, and recommended remediation.
+- **Map compliance controls** — Connect security findings with ISO 27001 and SOC 2 controls.
+- **Track security over time** — Review scan history, findings, trends, and security alerts.
+- **Generate PDF reports** — Export security assessment results.
+- **Manage multiple organizations** — Keep company data isolated with role-based access for Owners, Admins, and Analysts.
 
-- **Compliance Mapping:** Map security findings to ISO 27001 and SOC 2 controls.
+## How it works
 
-- **Multi-Tenant Architecture:** Isolate users, scans, alerts, and Azure connections by company.
-
-- **Role-Based Access Control:** Owner, Admin, and Analyst permissions.
-
-- **Security History:** Track scans, findings, trends, and alerts.
-
-- **PDF Reports:** Generate security assessment reports.
-
-- **Credential Encryption:** Encrypt Azure client secrets using Fernet.
-
-- **Docker Deployment:** Run the application using Docker Compose.
-
-## Tech Stack
-
-| Category | Technology |
-
-|---|---|
-
-| Backend | Python, FastAPI |
-
-| Database | SQLite, SQLAlchemy |
-
-| Authentication | JWT, Argon2 |
-
-| Cloud | Microsoft Azure SDK |
-
-| AI | LangChain, LangGraph, OpenAI |
-
-| Compliance | ISO 27001, SOC 2 |
-
-| Scheduling | APScheduler |
-
-| Containerization | Docker, Docker Compose |
-
-| Testing | Pytest |
-
-## Project Structure
-
-```text
-
-cloudguard-ai/
-
-├── app/
-
-│   ├── agents/
-
-│   ├── api/
-
-│   │   └── routes/
-
-│   ├── auth/
-
-│   ├── azure/
-
-│   ├── compliance/
-
-│   ├── core/
-
-│   ├── db/
-
-│   ├── reports/
-
-│   ├── scheduler/
-
-│   ├── schemas/
-
-│   ├── security/
-
-│   └── static/
-
-├── Dockerfile
-
-├── compose.yaml
-
-├── .dockerignore
-
-├── .env.example
-
-├── .gitignore
-
-├── [main.py](http://main.py)
-
-├── pyproject.toml
-
-└── uv.lock
+The workflow is straightforward:
 
 ```
+Connect Azure Subscription
+          |
+          v
+  Collect Resource Data
+          |
+          v
+  Run Security Checks
+          |
+          v
+  Identify Misconfigurations
+          |
+          v
+  AI-Powered Risk Analysis
+          |
+          v
+  Compliance Mapping
+          |
+          v
+  Dashboard & PDF Reports
+```
 
-## Getting Started
+The goal isn't just to report that something is wrong. It's to make the finding understandable and actionable.
+
+## Security is more than scanning
+
+CloudGuard AI also includes security controls around the platform itself:
+
+- JWT-based authentication.
+- Password hashing.
+- Company-level data isolation.
+- Role-based access control.
+- Encrypted Azure client credentials using Fernet.
+- Protected API endpoints based on user permissions.
+
+Azure credentials are encrypted before being stored. They are not returned in API responses.
+
+## Built with
+
+| Area              | Technology                   |
+| ----------------- | ---------------------------- |
+| Backend           | Python, FastAPI              |
+| Database          | SQLite, SQLAlchemy           |
+| Authentication    | JWT, Argon2                  |
+| Cloud Integration | Microsoft Azure SDK          |
+| AI                | LangChain, LangGraph, OpenAI |
+| Compliance        | ISO 27001, SOC 2             |
+| Scheduling        | APScheduler                  |
+| Deployment        | Docker, Docker Compose       |
+| Testing           | Pytest                       |
+
+## Project structure
+
+```
+cloudguard-ai/
+│
+├── app/
+│   ├── agents/       # AI security analysis
+│   ├── api/          # FastAPI routes
+│   ├── auth/         # Authentication and permissions
+│   ├── azure/        # Azure integrations
+│   ├── compliance/   # Compliance control mapping
+│   ├── core/         # Configuration and encryption
+│   ├── db/           # Database models
+│   ├── reports/      # PDF report generation
+│   ├── scheduler/    # Scan scheduling
+│   ├── schemas/      # Data validation
+│   ├── security/     # Security scanning rules
+│   └── static/       # Login and dashboard
+│
+├── Dockerfile
+├── compose.yaml
+├── main.py
+├── pyproject.toml
+├── uv.lock
+└── .env.example
+```
+
+## Run it locally
 
 ### Prerequisites
 
 - Python 3.12+
+- [uv](https://docs.astral.sh/uv/)
+- An Azure subscription
+- An OpenAI API key
+- Docker Desktop (for Docker deployment)
 
-- uv
+### 1. Clone the repository
 
-- Docker Desktop (for containerized deployment)
-
-- Azure subscription
-
-- OpenAI API key
-
-### Environment Configuration
-
-Clone the repository:
-
-```bash
-
-git clone [https://github.com/aveelash/cloudguard-ai.git](https://github.com/aveelash/cloudguard-ai.git)
-
+```
+git clone https://github.com/aveelash/cloudguard-ai.git
 cd cloudguard-ai
-
 ```
 
-Create your environment file:
+### 2. Set up the environment
 
-```bash
-
+```
 cp .env.example .env
-
 ```
 
-Configure the required environment variables in `.env`.
+Add your configuration to `.env`:
 
-Never commit `.env` or expose credentials.
+```
+OPENAI_API_KEY=
+AZURE_SUBSCRIPTION_ID=
+AZURE_TENANT_ID=
+AZURE_CLIENT_ID=
+AZURE_CLIENT_SECRET=
+AZURE_CREDENTIAL_ENCRYPTION_KEY=
+JWT_SECRET_KEY=
+```
 
-### Run Locally
+Use strong, securely generated secrets. Never commit your `.env` file.
 
-Install dependencies:
+### 3. Install dependencies
 
-```bash
-
+```
 uv sync
-
 ```
 
-Start the application:
-
-```bash
-
-uv run fastapi dev [main.py](http://main.py)
+### 4. Start the application
 
 ```
+uv run fastapi dev main.py
+```
 
-Open:
+Open the application:
 
-- Application: [http://localhost:8000](http://localhost:8000)
+| Service           | URL                                                          |
+| ----------------- | ------------------------------------------------------------ |
+| Application       | [http://localhost:8000](http://localhost:8000)               |
+| API Documentation | [http://localhost:8000/docs](http://localhost:8000/docs)     |
+| Health Check      | [http://localhost:8000/health](http://localhost:8000/health) |
 
-- Swagger API: [http://localhost:8000/docs](http://localhost:8000/docs)
+## Run with Docker
 
-- Health Check: [http://localhost:8000/health](http://localhost:8000/health)
+CloudGuard AI can also run as a Docker container using Docker Compose.
 
-## Docker Deployment
-
-Build and start the application:
-
-```bash
-
+```
 docker compose up -d --build
-
 ```
 
-Check container status:
+Check the container:
 
-```bash
-
+```
 docker compose ps
-
 ```
 
-View logs:
+View application logs:
 
-```bash
-
+```
 docker compose logs -f cloudguard-ai
-
 ```
 
 Stop the application:
 
-```bash
-
+```
 docker compose down
-
 ```
 
-The SQLite database is stored in a persistent Docker volume.
+The Docker deployment stores its SQLite database in a persistent volume, so restarting the container does not remove its data.
 
 ## Testing
 
-Run the local automated test suite:
+The project includes automated tests for security rules, scanning logic, AI analysis, and compliance mapping.
 
-```bash
+Run the test suite:
 
+```
 uv run python -m pytest app/agents app/compliance app/security -q --import-mode=importlib
-
 ```
 
 Compile application modules:
 
-```bash
-
+```
 uv run python -m compileall app
-
 ```
 
-## Security Notes
+## Current project status
 
-- Azure client secrets are encrypted at rest.
+- Core application and API implemented.
+- Azure integration and security scanning tested.
+- Authentication, authorization, and multi-tenant isolation implemented.
+- AI analysis and compliance mapping implemented.
+- PDF reporting implemented.
+- Docker build and persistent storage verified.
+- Automated tests passing.
 
-- Authentication uses JWT tokens.
+**Note:** Automatic scheduled scanning is currently paused. Manual scans are available when an Azure connection is configured with the required permissions.
 
-- Passwords are stored as hashes.
+## What's next?
 
-- API access is protected through role-based authorization.
+CloudGuard AI is a hands-on project focused on bringing together cloud security, backend engineering, AI, and compliance.
 
-- Company-level data isolation is enforced.
+There is still room to improve its coverage as cloud environments and security requirements evolve.
 
-- Secrets and local database files are excluded from Git.
+If you're interested in the implementation, feel free to explore the source code.
 
-## Current Deployment Notes
+---
 
-- Docker Compose provides a containerized application deployment.
+**Built by [Aveelash Hota](https://github.com/aveelash)**
 
-- SQLite uses a persistent Docker volume.
-
-- Automatic scheduled scanning is currently paused.
-
-- Azure scanning requires a configured Azure connection and appropriate permissions.
-
-## Author
-
-**Aveelash Hota**
-
-GitHub: [https://github.com/aveelash](https://github.com/aveelash)
+[GitHub Repository](https://github.com/aveelash/cloudguard-ai)
