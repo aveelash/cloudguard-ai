@@ -1,0 +1,4364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080f1d">
+
+<title>CloudGuard AI | Security Command Centre</title>
+
+<style>
+:root {
+    --bg:#080f1d;
+    --sidebar:#0b1424;
+    --surface:#101c2e;
+    --surface-2:#14233a;
+    --surface-3:#1a2b43;
+    --border:#263750;
+    --text:#edf3fc;
+    --muted:#91a4bd;
+    --blue:#55a8ff;
+    --cyan:#40d5d0;
+    --red:#ff647c;
+    --orange:#ffb45e;
+    --green:#4ed6a0;
+    --purple:#a78bfa;
+    --radius:13px;
+}
+
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body {
+    background:var(--bg);
+    color:var(--text);
+    font-family:Inter,"Segoe UI",Arial,sans-serif;
+    min-height:100vh;
+    font-size:14px;
+}
+
+button,input,select {
+    font:inherit;
+}
+
+button {
+    cursor:pointer;
+}
+
+a {
+    color:inherit;
+    text-decoration:none;
+}
+
+.app {
+    display:flex;
+    min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    width:255px;
+    flex-shrink:0;
+    background:var(--sidebar);
+    border-right:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    padding:25px 16px 18px;
+}
+
+.brand {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:0 9px 30px;
+}
+
+.brand-logo {
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    background:linear-gradient(135deg,#2678df,#36c9d1);
+    color:white;
+    font-size:22px;
+    font-weight:800;
+    box-shadow:0 5px 20px #2878df35;
+}
+
+.brand-name {
+    font-size:17px;
+    font-weight:750;
+    letter-spacing:-.5px;
+}
+
+.brand-caption {
+    font-size:9px;
+    color:var(--muted);
+    letter-spacing:1.6px;
+    margin-top:4px;
+}
+
+.nav-section {
+    color:#647b98;
+    font-size:10px;
+    font-weight:750;
+    letter-spacing:1.5px;
+    padding:17px 11px 10px;
+}
+
+
+/* =========================================
+   CLOUDGUARD AI — PREMIUM SIDEBAR NAVIGATION
+========================================= */
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.sidebar .nav-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    min-height: 46px;
+    padding: 0 15px;
+    margin: 0 5px;
+
+    color: #91a4bd;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    font-size: 13px;
+    font-weight: 550;
+    letter-spacing: 0.1px;
+
+    overflow: hidden;
+
+    transition:
+        color 220ms ease,
+        background 220ms ease,
+        border-color 220ms ease,
+        box-shadow 220ms ease,
+        transform 220ms ease;
+}
+
+/* Navigation icon */
+.sidebar .nav-link .nav-icon {
+    position: relative;
+    z-index: 1;
+
+    width: 22px;
+    flex-shrink: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 17px;
+    color: #7187a3;
+
+    transition:
+        color 220ms ease,
+        transform 220ms ease,
+        filter 220ms ease;
+}
+
+/* Navigation text */
+.sidebar .nav-link > span:not(.nav-icon) {
+    position: relative;
+    z-index: 1;
+}
+
+/* Hover state */
+.sidebar .nav-link:hover {
+    color: #eaf4ff;
+
+    background: linear-gradient(
+        100deg,
+        rgba(66, 133, 244, 0.10),
+        rgba(64, 213, 208, 0.045)
+    );
+
+    border-color: rgba(104, 160, 220, 0.15);
+
+    transform: translateX(2px);
+}
+
+.sidebar .nav-link:hover .nav-icon {
+    color: #8bcaff;
+    transform: translateX(1px);
+}
+
+/* Selected navigation item */
+.sidebar .nav-link.active {
+    color: #f5f9ff;
+
+    background: linear-gradient(
+        105deg,
+        rgba(47, 116, 207, 0.25) 0%,
+        rgba(37, 99, 168, 0.15) 55%,
+        rgba(35, 176, 181, 0.09) 100%
+    );
+
+    border-color: rgba(82, 166, 235, 0.30);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.055),
+        inset 0 0 22px rgba(63, 142, 219, 0.055),
+        0 5px 16px rgba(0, 0, 0, 0.12);
+
+    font-weight: 650;
+
+    transform: translateX(2px);
+}
+
+/* Premium selection indicator */
+.sidebar .nav-link.active::before {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    top: 9px;
+    bottom: 9px;
+
+    width: 3px;
+
+    border-radius: 0 5px 5px 0;
+
+    background: linear-gradient(
+        180deg,
+        #61c7ff,
+        #3d8bff 55%,
+        #45ded0
+    );
+
+    box-shadow:
+        0 0 8px rgba(75, 174, 255, 0.65),
+        0 0 17px rgba(75, 174, 255, 0.25);
+}
+
+/* Subtle highlight inside selected item */
+.sidebar .nav-link.active::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        110deg,
+        rgba(255, 255, 255, 0.055),
+        transparent 42%
+    );
+
+    pointer-events: none;
+}
+
+/* Selected icon */
+.sidebar .nav-link.active .nav-icon {
+    color: #75d8ff;
+
+    filter: drop-shadow(
+        0 0 5px rgba(85, 190, 255, 0.35)
+    );
+
+    transform: scale(1.08);
+}
+
+/* Keyboard accessibility */
+.sidebar .nav-link:focus-visible {
+    outline: 2px solid #55c6ff;
+    outline-offset: 3px;
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .sidebar .nav-link,
+    .sidebar .nav-link::before,
+    .sidebar .nav-link::after,
+    .sidebar .nav-link .nav-icon {
+        transition: none;
+    }
+}
+
+/* Navigation icons */
+.nav-icon {
+    width: 21px;
+    font-size: 17px;
+    text-align: center;
+}
+
+.sidebar-bottom {
+    margin-top:auto;
+    padding:15px 10px 0;
+    border-top:1px solid var(--border);
+}
+
+.connection-card {
+    background:var(--surface);
+    border:1px solid var(--border);
+    padding:12px;
+    border-radius:10px;
+}
+
+.connection-title {
+    font-size:11px;
+    font-weight:650;
+}
+
+.connection-description {
+    color:var(--muted);
+    font-size:10px;
+    margin-top:6px;
+}
+
+.connection-dot {
+    display:inline-block;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--green);
+    margin-right:6px;
+}
+
+/* MAIN */
+
+.main {
+    flex:1;
+    min-width:0;
+    padding:29px 34px;
+}
+
+.topbar {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-bottom:25px;
+}
+
+.heading h1 {
+    font-size:25px;
+    letter-spacing:-.8px;
+}
+
+.heading p {
+    font-size:12px;
+    color:var(--muted);
+    margin-top:7px;
+}
+
+.actions {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.environment-tag {
+    background:var(--surface);
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:10px 12px;
+    border-radius:8px;
+    font-size:11px;
+}
+
+.refresh-btn {
+    color:white;
+    border:1px solid #347fd0;
+    background:linear-gradient(135deg,#287cde,#2462bd);
+    border-radius:8px;
+    padding:11px 16px;
+    font-size:12px;
+    font-weight:700;
+    transition:.2s;
+}
+
+.refresh-btn:hover {
+    filter:brightness(1.15);
+    transform:translateY(-1px);
+}
+
+.refresh-btn:disabled {
+    opacity:.6;
+    cursor:wait;
+}
+
+.status-line {
+    color:var(--muted);
+    font-size:11px;
+    min-height:16px;
+    margin-bottom:22px;
+}
+
+/* SECTIONS */
+
+.section-heading {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin:27px 0 14px;
+}
+
+.section-heading h2 {
+    font-size:15px;
+    font-weight:720;
+}
+
+.section-heading p {
+    font-size:11px;
+    color:var(--muted);
+    margin-top:5px;
+}
+
+.section-meta {
+    font-size:10px;
+    color:var(--muted);
+}
+
+/* HERO */
+
+.hero {
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    background:linear-gradient(115deg,#132c49,#14243a 65%,#15313d);
+    border:1px solid #2a4c6c;
+    border-radius:15px;
+    padding:23px 25px;
+    margin-bottom:23px;
+}
+
+.hero::after {
+    content:"";
+    position:absolute;
+    width:230px;
+    height:230px;
+    right:3%;
+    top:-125px;
+    border-radius:50%;
+    border:1px solid #60b9ff25;
+    box-shadow:0 0 0 25px #60b9ff08,0 0 0 55px #60b9ff06;
+}
+
+.hero-content {
+    position:relative;
+    z-index:1;
+}
+
+.eyebrow {
+    color:#86caff;
+    font-size:10px;
+    font-weight:750;
+    letter-spacing:1.6px;
+    text-transform:uppercase;
+    margin-bottom:9px;
+}
+
+.hero h2 {
+    font-size:20px;
+    letter-spacing:-.5px;
+}
+
+.hero p {
+    color:#b3c8df;
+    font-size:12px;
+    line-height:1.7;
+    margin-top:8px;
+    max-width:590px;
+}
+
+.hero-status {
+    position:relative;
+    z-index:1;
+    min-width:145px;
+    text-align:center;
+    background:#0e2034aa;
+    border:1px solid #365574;
+    border-radius:11px;
+    padding:14px;
+}
+
+.hero-status strong {
+    display:block;
+    font-size:12px;
+    margin-top:7px;
+}
+
+.hero-status span {
+    font-size:10px;
+    color:var(--muted);
+}
+
+/* KPI */
+
+.kpi-grid {
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:15px;
+}
+
+.kpi {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:19px;
+    min-width:0;
+    transition:.2s;
+}
+
+.kpi:hover {
+    border-color:#416185;
+    transform:translateY(-2px);
+}
+
+.kpi-top {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+}
+
+.kpi-label {
+    color:var(--muted);
+    font-size:11px;
+    font-weight:550;
+}
+
+.kpi-icon {
+    width:34px;
+    height:34px;
+    display:grid;
+    place-items:center;
+    background:#203a59;
+    border-radius:9px;
+    font-size:16px;
+}
+
+.kpi-value {
+    font-size:29px;
+    font-weight:760;
+    letter-spacing:-1px;
+    margin-top:17px;
+}
+
+.kpi-foot {
+    font-size:10px;
+    color:var(--muted);
+    margin-top:7px;
+}
+
+.blue {color:var(--blue)}
+.red {color:var(--red)}
+.orange {color:var(--orange)}
+.green {color:var(--green)}
+.cyan {color:var(--cyan)}
+.purple {color:var(--purple)}
+
+/* PANELS AND CHARTS */
+
+.analytics-grid {
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    gap:16px;
+}
+
+.panel {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:20px;
+    min-width:0;
+}
+
+.panel-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:17px;
+}
+
+.panel-title {
+    font-size:13px;
+    font-weight:700;
+}
+
+.panel-description {
+    color:var(--muted);
+    font-size:10px;
+    margin-top:5px;
+}
+
+.panel-tag {
+    background:#1d3552;
+    color:#a9d4ff;
+    border:1px solid #2c4b6b;
+    padding:6px 9px;
+    border-radius:6px;
+    font-size:10px;
+    white-space:nowrap;
+}
+
+canvas {
+    width:100%;
+    height:230px;
+    display:block;
+}
+
+/* COMPLIANCE */
+
+.compliance-grid {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:14px;
+}
+
+.framework {
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:11px;
+    padding:17px;
+}
+
+.framework-top {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.framework-name {
+    font-size:14px;
+    font-weight:750;
+}
+
+.framework-count {
+    color:var(--cyan);
+    font-size:10px;
+    background:#173c40;
+    border:1px solid #28575a;
+    border-radius:5px;
+    padding:5px 8px;
+}
+
+.framework-description {
+    font-size:11px;
+    color:var(--muted);
+    line-height:1.6;
+    margin-top:10px;
+}
+
+.controls {
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-top:13px;
+}
+
+.control {
+    background:#1d3855;
+    border:1px solid #345674;
+    color:#c0dcf7;
+    font-size:10px;
+    padding:6px 9px;
+    border-radius:5px;
+}
+
+/* SECURITY ALERTS */
+
+.alert-list {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.alert-item {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    padding:15px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:9px;
+}
+
+.alert-item.unread {
+    border-left:3px solid var(--red);
+}
+
+.alert-content {
+    min-width:0;
+}
+
+.alert-title {
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:6px;
+}
+
+.alert-description {
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.6;
+    overflow-wrap:anywhere;
+}
+
+.alert-meta {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:9px;
+}
+
+.alert-status {
+    color:var(--orange);
+    font-size:10px;
+    font-weight:700;
+}
+
+.alert-status.read {
+    color:var(--green);
+}
+
+.alert-time {
+    color:var(--muted);
+    font-size:10px;
+}
+
+.alert-read-btn {
+    flex-shrink:0;
+    background:#193c60;
+    border:1px solid #347fc0;
+    color:#a9d7ff;
+    padding:8px 11px;
+    border-radius:6px;
+    font-size:10px;
+    font-weight:700;
+}
+
+.alert-read-btn:hover {
+    background:#24527e;
+    color:white;
+}
+
+@media (max-width:600px) {
+    .alert-item {
+        align-items:flex-start;
+        flex-direction:column;
+    }
+}
+
+/* TABLES */
+
+.table-panel {
+    margin-top:15px;
+}
+
+.table-tools {
+    display:flex;
+    gap:9px;
+    flex-wrap:wrap;
+}
+
+.search-input,.filter-select {
+    background:#0d192a;
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:9px 11px;
+    border-radius:7px;
+    font-size:11px;
+    outline:none;
+}
+
+.search-input {
+    min-width:190px;
+}
+
+.search-input:focus,.filter-select:focus {
+    border-color:var(--blue);
+}
+
+.table-wrap {
+    overflow-x:auto;
+    width:100%;
+}
+
+table {
+    width:100%;
+    border-collapse:collapse;
+    min-width:760px;
+    font-size:11px;
+}
+
+th {
+    text-align:left;
+    color:#849ab5;
+    padding:13px 11px;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.4px;
+    border-bottom:1px solid var(--border);
+    white-space:nowrap;
+}
+
+td {
+    color:#dce6f4;
+    padding:14px 11px;
+    border-bottom:1px solid #203149;
+    vertical-align:middle;
+}
+
+tbody tr:hover {
+    background:#15263b;
+}
+
+tbody tr:last-child td {
+    border-bottom:none;
+}
+
+.resource-name {
+    font-weight:650;
+}
+
+.issue-name {
+    max-width:330px;
+    line-height:1.5;
+}
+
+.severity {
+    display:inline-block;
+    padding:5px 8px;
+    border-radius:5px;
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:.5px;
+}
+
+.severity.high {
+    color:#ff9aaa;
+    background:#462534;
+}
+
+.severity.medium {
+    color:#ffd18a;
+    background:#483720;
+}
+
+.severity.low {
+    color:#76e6b5;
+    background:#193e34;
+}
+
+.severity.unknown {
+    color:var(--muted);
+    background:var(--surface-3);
+}
+
+.reference-text {
+    color:#a8c8eb;
+    line-height:1.6;
+}
+
+.empty {
+    text-align:center;
+    padding:28px 12px;
+    color:var(--muted);
+    font-size:11px;
+}
+
+.error-message {
+    color:var(--red);
+}
+
+/* SCAN HISTORY ACTION */
+
+.clickable-scan {
+    cursor:pointer;
+    transition:background .2s;
+}
+
+.clickable-scan:hover {
+    background:#1a304a;
+}
+
+.view-scan-btn {
+    background:#193c60;
+    border:1px solid #347fc0;
+    color:#a9d7ff;
+    padding:7px 11px;
+    border-radius:6px;
+    font-size:10px;
+    font-weight:700;
+    white-space:nowrap;
+    transition:.2s;
+}
+
+.view-scan-btn:hover {
+    background:#24527e;
+    color:white;
+}
+
+.view-scan-btn:focus-visible {
+    outline:2px solid var(--cyan);
+    outline-offset:3px;
+}
+
+/* INVESTIGATE BUTTON */
+
+.investigate-btn {
+    background:#193c60;
+    border:1px solid #347fc0;
+    color:#a9d7ff;
+    padding:8px 11px;
+    border-radius:7px;
+    font-size:10px;
+    font-weight:700;
+    white-space:nowrap;
+    transition:.2s;
+}
+
+.investigate-btn:hover {
+    background:#24527e;
+    color:white;
+}
+
+.investigate-btn:disabled {
+    opacity:.6;
+    cursor:wait;
+}
+
+/* INVESTIGATION MODAL */
+
+.investigation-overlay {
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    background:#030914e8;
+    backdrop-filter:blur(6px);
+    padding:25px;
+    align-items:center;
+    justify-content:center;
+}
+
+.investigation-overlay.show {
+    display:flex;
+}
+
+.investigation-modal {
+    width:100%;
+    max-width:850px;
+    max-height:90vh;
+    overflow-y:auto;
+    background:#101c2e;
+    border:1px solid #344b68;
+    border-radius:15px;
+    padding:25px;
+    box-shadow:0 25px 80px #0009;
+}
+
+.investigation-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.investigation-header h2 {
+    font-size:19px;
+}
+
+.investigation-subtitle {
+    color:var(--muted);
+    font-size:11px;
+    margin-top:7px;
+}
+
+.close-investigation {
+    background:#1b2c42;
+    border:1px solid var(--border);
+    color:white;
+    border-radius:7px;
+    padding:7px 11px;
+}
+
+.close-investigation:hover {
+    background:#29415f;
+}
+
+.investigation-resource {
+    background:#142943;
+    border:1px solid #2b4c6c;
+    border-radius:9px;
+    padding:13px;
+    margin-bottom:17px;
+}
+
+.investigation-resource strong {
+    display:block;
+    font-size:12px;
+    margin-bottom:6px;
+    overflow-wrap:anywhere;
+}
+
+.investigation-resource span {
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.7;
+}
+
+.investigation-resource .resource-id {
+    color:#8bbce8;
+    font-size:10px;
+    margin-bottom:5px;
+    overflow-wrap:anywhere;
+}
+
+.investigation-result {
+    background:#0c1727;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:18px;
+    min-height:150px;
+}
+
+.investigation-loading {
+    color:var(--muted);
+    text-align:center;
+    padding:35px 10px;
+    font-size:12px;
+}
+
+.investigation-error {
+    color:var(--red);
+    font-size:12px;
+    line-height:1.7;
+}
+
+/* STRUCTURED AI ASSESSMENT */
+
+.analysis-banner {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+    background:#142943;
+    border:1px solid #2b4c6c;
+    border-radius:10px;
+    padding:13px 15px;
+    margin-bottom:16px;
+}
+
+.analysis-banner-label {
+    color:#91a4bd;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.analysis-banner-value {
+    color:var(--green);
+    font-size:11px;
+    font-weight:700;
+    margin-top:5px;
+}
+
+.priority-badge {
+    padding:7px 11px;
+    border-radius:6px;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.5px;
+}
+
+.priority-badge.high {
+    color:#ff9aaa;
+    background:#462534;
+    border:1px solid #754052;
+}
+
+.priority-badge.medium {
+    color:#ffd18a;
+    background:#483720;
+    border:1px solid #70552d;
+}
+
+.priority-badge.low {
+    color:#76e6b5;
+    background:#193e34;
+    border:1px solid #28634e;
+}
+
+.priority-badge.unknown {
+    color:#b8c7da;
+    background:#263750;
+    border:1px solid #405774;
+}
+
+.analysis-heading {
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin-bottom:17px;
+    padding-bottom:14px;
+    border-bottom:1px solid var(--border);
+}
+
+.analysis-heading h3 {
+    font-size:13px;
+    color:var(--cyan);
+}
+
+.analysis-heading span {
+    font-size:10px;
+    color:var(--muted);
+    margin-left:auto;
+}
+
+.analysis-sections {
+    display:grid;
+    gap:13px;
+}
+
+.analysis-card {
+    background:#111f32;
+    border:1px solid #293d57;
+    border-radius:10px;
+    padding:17px;
+}
+
+.analysis-card.priority-card {
+    border-color:#75404d;
+    background:linear-gradient(110deg,#291c2b,#152033);
+}
+
+.analysis-card-header {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:11px;
+}
+
+.analysis-number {
+    width:30px;
+    height:30px;
+    display:grid;
+    place-items:center;
+    border-radius:8px;
+    background:#1c3a59;
+    color:#8bcaff;
+    font-size:12px;
+    font-weight:800;
+    flex-shrink:0;
+}
+
+.priority-card .analysis-number {
+    background:#542b3b;
+    color:#ff9aaa;
+}
+
+.analysis-card-header h4 {
+    font-size:12px;
+    font-weight:750;
+    color:#e8f1fc;
+}
+
+.analysis-content {
+    color:#bdcce0;
+    font-size:12px;
+    line-height:1.85;
+    overflow-wrap:anywhere;
+}
+
+.analysis-content p {
+    margin:7px 0;
+}
+
+.analysis-content p:last-child {
+    margin-bottom:0;
+}
+
+.analysis-content strong {
+    color:#f3f7ff;
+    font-weight:750;
+}
+
+.analysis-content ul,
+.analysis-content ol {
+    padding-left:21px;
+    margin:9px 0;
+}
+
+.analysis-content li {
+    font-size:12px;
+    color:#bdcce0;
+    line-height:1.8;
+    padding-left:4px;
+    margin:5px 0;
+}
+
+.analysis-content li::marker {
+    color:var(--blue);
+}
+
+.analysis-content code {
+    background:#1d3552;
+    border:1px solid #34516f;
+    border-radius:4px;
+    padding:2px 5px;
+    color:#9bd3ff;
+    font-size:11px;
+}
+
+.analysis-disclaimer {
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    background:#17283c;
+    border:1px solid #344a62;
+    border-radius:9px;
+    padding:13px;
+    margin-top:16px;
+    color:#9db1c9;
+    font-size:10px;
+    line-height:1.7;
+}
+
+.analysis-disclaimer-icon {
+    font-size:15px;
+    flex-shrink:0;
+}
+
+.analysis-disclaimer strong {
+    display:block;
+    color:#c9d9eb;
+    margin-bottom:3px;
+}
+
+.analysis-loading-icon {
+    font-size:25px;
+    color:var(--cyan);
+    margin-bottom:12px;
+}
+
+.analysis-error {
+    color:var(--red);
+    font-size:12px;
+    line-height:1.8;
+    padding:20px;
+    background:#301d2b;
+    border:1px solid #633449;
+    border-radius:9px;
+}
+
+/* SCAN DETAILS MODAL */
+
+.scan-details-overlay {
+    position:fixed;
+    inset:0;
+    z-index:10000;
+    background:rgba(3,9,20,.85);
+    backdrop-filter:blur(5px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.scan-details-modal {
+    width:100%;
+    max-width:850px;
+    max-height:90vh;
+    overflow-y:auto;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:24px;
+    color:var(--text);
+    box-shadow:0 25px 80px #0009;
+}
+
+.scan-details-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.scan-details-header h2 {
+    font-size:19px;
+}
+
+.scan-details-date {
+    color:var(--muted);
+    font-size:12px;
+    margin-top:6px;
+}
+
+.close-scan-details {
+    background:#1b2c42;
+    border:1px solid var(--border);
+    color:white;
+    padding:8px 13px;
+    border-radius:8px;
+}
+
+.close-scan-details:hover {
+    background:#29415f;
+}
+
+.scan-details-metrics {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+    gap:12px;
+}
+
+.scan-details-metric {
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:14px;
+}
+
+.scan-details-metric strong {
+    display:block;
+    font-size:22px;
+}
+
+.scan-details-metric p {
+    color:var(--muted);
+    font-size:11px;
+    margin-top:6px;
+}
+
+.scan-details-findings {
+    margin-top:25px;
+}
+
+.scan-details-findings h3 {
+    font-size:15px;
+    margin-bottom:12px;
+}
+
+.scan-finding-card {
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:16px;
+    margin-top:12px;
+}
+
+.scan-finding-name {
+    font-weight:700;
+    margin-bottom:8px;
+    overflow-wrap:anywhere;
+}
+
+.scan-finding-issue {
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.6;
+}
+
+.scan-finding-meta {
+    margin-top:12px;
+    font-size:12px;
+}
+
+.scan-finding-id {
+    color:#8bbce8;
+    overflow-wrap:anywhere;
+}
+
+.scan-compliance {
+    margin-top:12px;
+    font-size:12px;
+}
+
+.scan-compliance-item {
+    margin-top:6px;
+    color:#a8c8eb;
+}
+
+/* FOOTER */
+
+.footer {
+    text-align:center;
+    padding:27px 10px 10px;
+    color:#607793;
+    font-size:9px;
+    letter-spacing:1px;
+}
+
+/* =========================================
+   PREMIUM SECTION NAVIGATION FEEDBACK
+========================================= */
+
+html {
+    scroll-behavior: auto;
+    scroll-padding-top: 25px;
+}
+
+/* Subtle feedback when a section is selected */
+.section-flash {
+    animation: sectionFlash 1.2s ease-out;
+    border-radius: 10px;
+}
+
+@keyframes sectionFlash {
+    0% {
+        background-color: rgba(64, 213, 208, 0.075);
+    }
+
+    45% {
+        background-color: rgba(85, 168, 255, 0.045);
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .section-flash {
+        animation: none;
+    }
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:1150px) {
+    .sidebar {
+        width:220px;
+    }
+
+    .main {
+        padding:25px 22px;
+    }
+
+    .kpi-grid {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .analytics-grid {
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:720px) {
+    .app {
+        display:block;
+    }
+
+    .sidebar {
+        width:100%;
+        padding:13px;
+        border-right:none;
+        border-bottom:1px solid var(--border);
+    }
+
+    .brand {
+        padding-bottom:12px;
+    }
+
+    .nav-section,.sidebar-bottom {
+        display:none;
+    }
+
+    .sidebar nav {
+        display:flex;
+        overflow-x:auto;
+        gap:4px;
+    }
+
+    .nav-link {
+        white-space:nowrap;
+        margin:0;
+        padding:9px;
+    }
+
+    .main {
+        padding:22px 15px;
+    }
+
+    .hero {
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .hero-status {
+        width:100%;
+    }
+
+    .compliance-grid {
+        grid-template-columns:1fr;
+    }
+
+    .investigation-overlay {
+        padding:10px;
+    }
+
+    .investigation-modal {
+        padding:17px;
+        max-height:94vh;
+    }
+
+    .scan-details-modal {
+        padding:17px;
+        max-height:94vh;
+    }
+}
+
+@media(max-width:430px) {
+    .kpi-grid {
+        grid-template-columns:1fr;
+    }
+
+    .actions {
+        width:100%;
+    }
+
+    .refresh-btn {
+        flex:1;
+    }
+
+    .environment-tag {
+        flex:1;
+        text-align:center;
+    }
+
+    .table-tools {
+        width:100%;
+    }
+
+    .search-input {
+        min-width:0;
+        width:100%;
+    }
+
+    .analysis-heading {
+        flex-wrap:wrap;
+    }
+}
+
+/* ACTIVE DASHBOARD SECTION */
+
+.section-heading.section-current {
+    position: relative;
+    padding: 12px 15px;
+    margin-left: -15px;
+    margin-right: -15px;
+
+    background: linear-gradient(
+        100deg,
+        rgba(49, 130, 206, 0.16),
+        rgba(64, 213, 208, 0.055),
+        transparent
+    );
+
+    border-left: 3px solid #55a8ff;
+    border-radius: 0 9px 9px 0;
+
+    box-shadow:
+        inset 0 0 18px rgba(85, 168, 255, 0.045),
+        0 4px 18px rgba(0, 0, 0, 0.08);
+
+    transition: background 0.3s ease;
+}
+
+.section-heading.section-current h2 {
+    color: #ffffff;
+}
+
+.section-heading.section-current p {
+    color: #a9c9e9;
+}
+
+/* LOGOUT BUTTON */
+
+.logout-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+    padding: 12px 14px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 650;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.logout-button span:first-child {
+    font-size: 17px;
+}
+
+.logout-button:hover {
+    background: #ff647c12;
+    border-color: #ff647c35;
+    color: #ff647c;
+    transform: translateX(3px);
+}
+
+/* USER PROFILE */
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    min-width: 190px;
+}
+
+.user-avatar {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    color: #071321;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.user-details {
+    min-width: 0;
+}
+
+.user-company {
+    color: var(--text);
+    font-size: 11px;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-email {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+    .user-profile {
+        min-width: 0;
+    }
+
+    .user-email {
+        display: none;
+    }
+}
+
+
+/* SECURITY REPORT LOADING OVERLAY */
+
+.report-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(3, 9, 20, 0.82);
+    backdrop-filter: blur(12px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.report-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.report-loader-card {
+    width: 100%;
+    max-width: 390px;
+    padding: 38px 30px;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: linear-gradient(145deg, #14243a, #0b1627);
+    box-shadow: 0 25px 90px #00000080;
+    transform: translateY(15px) scale(0.97);
+    transition: transform 0.3s ease;
+}
+
+.report-overlay.active .report-loader-card {
+    transform: translateY(0) scale(1);
+}
+
+.report-spinner {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 24px;
+    border: 3px solid #263750;
+    border-top-color: var(--cyan);
+    border-right-color: var(--blue);
+    border-radius: 50%;
+    animation: reportSpin 0.9s linear infinite;
+}
+
+@keyframes reportSpin {
+    to { transform: rotate(360deg); }
+}
+
+.report-status-icon {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    background: #4ed6a018;
+    color: var(--green);
+    font-size: 27px;
+}
+
+.report-loader-title {
+    margin-bottom: 10px;
+    color: var(--text);
+    font-size: 19px;
+    font-weight: 750;
+    letter-spacing: -0.4px;
+}
+
+.report-loader-message {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.report-loader-caption {
+    margin-top: 25px;
+    padding-top: 17px;
+    border-top: 1px solid var(--border);
+    color: var(--cyan);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.report-progress-track {
+    height: 3px;
+    margin-top: 23px;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #263750;
+}
+
+.report-progress-bar {
+    width: 35%;
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+    animation: reportProgress 1.6s ease-in-out infinite;
+}
+
+@keyframes reportProgress {
+    0% { transform: translateX(-110%); }
+    100% { transform: translateX(300%); }
+}
+
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+        <div class="brand-logo">C</div>
+
+        <div>
+            <div class="brand-name">CloudGuard AI</div>
+            <div class="brand-caption">SECURITY INTELLIGENCE</div>
+        </div>
+    </div>
+
+    <div class="nav-section">WORKSPACE</div>
+
+    <nav>
+        <a href="#overview" class="nav-link active">
+            <span class="nav-icon">▦</span>Overview
+        </a>
+
+        <a href="#findings" class="nav-link">
+            <span class="nav-icon">◈</span>Security Findings
+        </a>
+
+        <a href="#compliance" class="nav-link">
+            <span class="nav-icon">▤</span>Compliance Centre
+        </a>
+
+        <a href="#history" class="nav-link">
+            <span class="nav-icon">◷</span>Scan History
+        </a>
+
+        <a href="#alerts" class="nav-link">
+            <span class="nav-icon">♧</span>Security Alerts
+        </a>
+    </nav>
+
+    <div class="nav-section">RESOURCES</div>
+
+    <nav>
+        <a href="#" class="nav-link"
+            onclick="downloadSecurityReport(); return false;">
+            <span class="nav-icon">⇩</span>Security Reports
+        </a>
+
+        <a href="/docs" class="nav-link">
+            <span class="nav-icon">⌘</span>API Documentation
+        </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+        <div class="connection-card">
+            <div class="connection-title">
+                <span class="connection-dot"></span>Cloud environment
+            </div>
+
+            <div class="connection-description">
+                Azure scan integration
+            </div>
+        </div>
+
+        <button class="logout-button" onclick="logoutUser()">
+            <span>↪</span>
+            <span>Sign Out</span>
+        </button>
+    </div>
+
+</aside>
+
+<!-- MAIN CONTENT -->
+
+<main class="main">
+
+    <header class="topbar" id="overview">
+
+        <div class="heading">
+            <h1>Security Command Centre</h1>
+            <p>Enterprise cloud security and compliance intelligence</p>
+        </div>
+
+        <div class="actions">
+            <div class="user-profile" id="userProfile">
+                <div class="user-avatar" id="userAvatar">U</div>
+
+                <div class="user-details">
+                    <div class="user-company" id="userCompany">Loading...</div>
+                    <div class="user-email" id="userEmail">Loading account...</div>
+                </div>
+            </div>
+
+            <span class="environment-tag">Azure Environment</span>
+
+            <button
+                class="refresh-btn"
+                id="refreshButton"
+                onclick="loadDashboard()"
+            >
+                ↻ &nbsp; Refresh Data
+            </button>
+        </div>
+
+    </header>
+
+<div class="status-line" id="status">
+    Connecting to security services...
+</div>
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="eyebrow">Cloud security overview</div>
+
+        <h2>Your security posture, in one place.</h2>
+
+        <p>
+            Review security observations, understand potential risks
+            and explore compliance control references across your
+            Azure environment.
+        </p>
+
+    </div>
+
+    <div class="hero-status">
+
+        <span class="connection-dot"></span>
+
+        <strong id="connectionTitle">Connecting...</strong>
+
+        <span id="connectionSubtitle">
+            Checking dashboard API
+        </span>
+
+    </div>
+
+</section>
+
+<!-- EXECUTIVE OVERVIEW -->
+
+<div class="section-heading">
+
+    <div>
+        <h2>Executive Overview</h2>
+        <p>Security metrics from your saved scan records</p>
+    </div>
+
+    <span class="section-meta">Historical overview</span>
+
+</div>
+
+<section class="kpi-grid">
+
+    <div class="kpi">
+        <div class="kpi-top">
+            <span class="kpi-label">Total Security Scans</span>
+            <span class="kpi-icon">⌕</span>
+        </div>
+        <div class="kpi-value blue" id="totalScans">0</div>
+        <div class="kpi-foot">Saved scan records</div>
+    </div>
+
+    <div class="kpi">
+        <div class="kpi-top">
+            <span class="kpi-label">Historical Findings</span>
+            <span class="kpi-icon">◈</span>
+        </div>
+        <div class="kpi-value cyan" id="totalFindings">0</div>
+        <div class="kpi-foot">Observations across saved scans</div>
+    </div>
+
+    <div class="kpi">
+        <div class="kpi-top">
+            <span class="kpi-label">High Severity</span>
+            <span class="kpi-icon">⚠</span>
+        </div>
+        <div class="kpi-value red" id="highFindings">0</div>
+        <div class="kpi-foot">Across saved scan records</div>
+    </div>
+
+    <div class="kpi">
+        <div class="kpi-top">
+            <span class="kpi-label">Latest Scan Resources</span>
+            <span class="kpi-icon">◇</span>
+        </div>
+        <div class="kpi-value green" id="latestResources">0</div>
+        <div class="kpi-foot">Resources in latest scan</div>
+    </div>
+
+</section>
+
+<!-- LATEST SCAN SUMMARY -->
+
+<div class="section-heading">
+    <div>
+        <h2>Latest Scan Summary</h2>
+        <p>Most recent security assessment</p>
+    </div>
+
+    <span class="section-meta" id="latestScanDate">
+        No scan available
+    </span>
+</div>
+
+<section class="kpi-grid">
+
+    <div class="kpi">
+        <div class="kpi-top">
+            <span class="kpi-label">Total Findings</span>
+            <span class="kpi-icon">◈</span>
+        </div>
+        <div class="kpi-value" id="latestFindings">0</div>
+        <div class="kpi-foot">Latest scan observations</div>
+    </div>
+
+    <div class="kpi">
+        <div class="kpi-top">
+            <span class="kpi-label">High Severity</span>
+            <span class="kpi-icon">!</span>
+        </div>
+        <div class="kpi-value red" id="latestHigh">0</div>
+        <div class="kpi-foot">Latest scan</div>
+    </div>
+
+    <div class="kpi">
+        <div class="kpi-top">
+            <span class="kpi-label">Medium Severity</span>
+            <span class="kpi-icon">◉</span>
+        </div>
+        <div class="kpi-value orange" id="latestMedium">0</div>
+        <div class="kpi-foot">Latest scan</div>
+    </div>
+
+    <div class="kpi">
+        <div class="kpi-top">
+            <span class="kpi-label">Low Severity</span>
+            <span class="kpi-icon">✓</span>
+        </div>
+        <div class="kpi-value green" id="latestLow">0</div>
+        <div class="kpi-foot">Latest scan</div>
+    </div>
+
+</section>
+
+
+<!-- AUTOMATED SECURITY SCANNING -->
+
+<div class="section-heading" id="scheduler">
+    <div>
+        <h2>Automated Security Scanning</h2>
+        <p>Monitor scheduled scans and trigger security assessments</p>
+    </div>
+
+    <span class="panel-tag">24-hour schedule</span>
+</div>
+
+<section class="panel table-panel">
+
+    <div class="panel-header">
+        <div>
+            <div class="panel-title">Scheduler Status</div>
+            <div class="panel-description">
+                Automatic security assessment service
+            </div>
+        </div>
+
+        <span class="panel-tag" id="schedulerStatus">
+            Checking status...
+        </span>
+    </div>
+
+    <div class="alert-item">
+        <div class="alert-content">
+            <div class="alert-title">Next Scheduled Scan</div>
+            <div class="alert-description" id="nextScheduledScan">
+                Retrieving schedule...
+            </div>
+        </div>
+
+        <button
+            class="refresh-btn"
+            id="runScanButton"
+            onclick="runScanNow()"
+        >
+            ▶ Run Scan Now
+        </button>
+    </div>
+
+    <div class="panel-description" id="schedulerMessage"
+         style="margin-top:12px;">
+        Checking automatic scanning service...
+    </div>
+
+</section>
+
+
+<!-- SECURITY ALERTS -->
+
+<div class="section-heading" id="alerts">
+    <div>
+        <h2>Security Alerts</h2>
+        <p>Newly detected high-severity security risks</p>
+    </div>
+
+    <span class="panel-tag" id="unreadAlertCount">
+        0 Unread
+    </span>
+</div>
+
+<section class="panel table-panel">
+
+    <div class="panel-header">
+        <div>
+            <div class="panel-title">Alert Centre</div>
+            <div class="panel-description">
+                Review and acknowledge newly detected security risks
+            </div>
+        </div>
+
+        <button class="view-scan-btn" onclick="loadDashboard()">
+            ↻ Refresh Alerts
+        </button>
+    </div>
+
+    <div id="alertsContainer">
+        <div class="empty">Loading security alerts...</div>
+    </div>
+
+</section>
+
+<!-- RISK ANALYTICS -->
+
+<div class="section-heading">
+    <div>
+        <h2>Risk Analytics</h2>
+        <p>Severity distribution and historical scan trends</p>
+    </div>
+</div>
+
+<section class="analytics-grid">
+
+    <div class="panel">
+        <div class="panel-header">
+            <div>
+                <div class="panel-title">
+                    Historical Severity Distribution
+                </div>
+                <div class="panel-description">
+                    Findings recorded across all saved scans
+                </div>
+            </div>
+            <span class="panel-tag">Risk overview</span>
+        </div>
+
+        <canvas id="severityChart"></canvas>
+    </div>
+
+    <div class="panel">
+        <div class="panel-header">
+            <div>
+                <div class="panel-title">
+                    Security Scan Trends
+                </div>
+                <div class="panel-description">
+                    Findings recorded in each scan
+                </div>
+            </div>
+            <span class="panel-tag">Historical</span>
+        </div>
+
+        <canvas id="trendChart"></canvas>
+    </div>
+
+</section>
+
+<!-- COMPLIANCE CENTRE -->
+
+<div class="section-heading" id="compliance">
+    <div>
+        <h2>Compliance Centre</h2>
+        <p>Framework control references identified in the latest scan</p>
+    </div>
+
+    <span class="section-meta">ISO 27001 · SOC 2</span>
+</div>
+
+<section class="compliance-grid" id="frameworkList">
+    <div class="panel empty">
+        Loading compliance references...
+    </div>
+</section>
+
+<!-- SECURITY FINDINGS -->
+
+<div class="section-heading" id="findings">
+    <div>
+        <h2>Security Findings</h2>
+        <p>Investigate risks and review remediation recommendations</p>
+    </div>
+</div>
+
+<section class="panel table-panel">
+
+    <div class="panel-header">
+        <div>
+            <div class="panel-title">Latest Scan Findings</div>
+            <div class="panel-description">
+                Select Investigate to get an AI-powered risk assessment
+            </div>
+        </div>
+
+        <div class="table-tools">
+            <input
+                class="search-input"
+                id="findingSearch"
+                type="search"
+                placeholder="Search findings..."
+                aria-label="Search findings"
+                oninput="filterFindings()"
+            >
+
+            <select
+                class="filter-select"
+                id="severityFilter"
+                aria-label="Filter by severity"
+                onchange="filterFindings()"
+            >
+                <option value="all">All severities</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>RESOURCE</th>
+                    <th>SECURITY ISSUE</th>
+                    <th>SEVERITY</th>
+                    <th>COMPLIANCE REFERENCES</th>
+                    <th>AI ANALYSIS</th>
+                </tr>
+            </thead>
+
+            <tbody id="findingsTable">
+                <tr>
+                    <td colspan="5" class="empty">
+                        Loading findings...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+<!-- SCAN HISTORY -->
+
+<div class="section-heading" id="history">
+    <div>
+        <h2>Audit & Scan History</h2>
+        <p>Historical security assessment records</p>
+    </div>
+</div>
+
+<section class="panel table-panel">
+
+    <div class="panel-header">
+        <div>
+            <div class="panel-title">Recent Security Scans</div>
+            <div class="panel-description">
+                Previously saved assessment records
+            </div>
+        </div>
+
+        <span class="panel-tag">Scan history</span>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>SCAN ID</th>
+                    <th>DATE & TIME</th>
+                    <th>RESOURCES</th>
+                    <th>FINDINGS</th>
+                    <th>HIGH</th>
+                    <th>MEDIUM</th>
+                    <th>LOW</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+
+            <tbody id="scanTable">
+                <tr>
+                    <td colspan="8" class="empty">
+                        Loading scan history...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+<!-- AI INVESTIGATION MODAL -->
+
+<div
+    class="investigation-overlay"
+    id="investigationOverlay"
+    onclick="if(event.target === this) closeInvestigation()"
+>
+    <section
+        class="investigation-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="investigationTitle"
+    >
+        <div class="investigation-header">
+            <div>
+                <h2 id="investigationTitle">
+                    AI Security Investigation
+                </h2>
+
+                <p class="investigation-subtitle">
+                    AI-powered risk explanation and remediation guidance
+                </p>
+            </div>
+
+            <button
+                class="close-investigation"
+                onclick="closeInvestigation()"
+                aria-label="Close investigation"
+            >
+                ✕
+            </button>
+        </div>
+
+        <div class="investigation-resource">
+            <strong id="investigationResource">Resource</strong>
+            <span id="investigationPrincipal" class="resource-id"></span>
+            <span id="investigationIssue">Security issue</span>
+        </div>
+
+        <div
+            class="investigation-result"
+            id="investigationResult"
+            aria-live="polite"
+        >
+            <div class="investigation-loading">
+                Preparing investigation...
+            </div>
+        </div>
+    </section>
+</div>
+
+<footer class="footer">
+    CLOUDGUARD AI · CLOUD SECURITY & COMPLIANCE INTELLIGENCE
+</footer>
+
+</main>
+</div>
+
+<script>
+
+/* AUTHENTICATION CHECK */
+
+const authToken = sessionStorage.getItem("cloudguard_token");
+
+if (!authToken) {
+    window.location.replace("/login");
+}
+
+/* AUTHENTICATED API REQUESTS */
+
+async function apiFetch(url, options = {}) {
+    if (!authToken) {
+        window.location.replace("/login");
+        throw new Error("Authentication required.");
+    }
+
+    const headers = new Headers(options.headers || {});
+    headers.set("Authorization", `Bearer ${authToken}`);
+
+    const response = await fetch(url, {
+        ...options,
+        headers
+    });
+
+    if (response.status === 401 || response.status === 403) {
+        sessionStorage.removeItem("cloudguard_token");
+        window.location.replace("/login");
+        throw new Error("Session expired. Please sign in again.");
+    }
+
+    return response;
+}
+
+/* LOGOUT */
+
+function logoutUser() {
+    sessionStorage.removeItem("cloudguard_token");
+    window.location.replace("/login");
+}
+
+/* DOWNLOAD AUTHENTICATED SECURITY REPORT */
+
+
+async function downloadSecurityReport() {
+    const overlay = document.getElementById("reportOverlay");
+    const spinner = document.getElementById("reportSpinner");
+    const title = document.getElementById("reportLoaderTitle");
+    const message = document.getElementById("reportLoaderMessage");
+    const caption = document.getElementById("reportLoaderCaption");
+    const progress = document.getElementById("reportProgress");
+
+    // Show loading state
+    overlay.classList.add("active");
+
+    spinner.style.display = "block";
+    progress.style.display = "block";
+
+    title.textContent = "Generating Security Report";
+    message.textContent =
+        "Running security analysis and preparing your PDF report. Please wait while we process your security findings.";
+
+    caption.textContent = "CLOUDGUARD AI · SECURITY INTELLIGENCE";
+
+    try {
+        const response = await apiFetch("/api/reports/security/pdf");
+
+        if (!response.ok) {
+            throw new Error("Unable to generate security report.");
+        }
+
+        const blob = await response.blob();
+
+        if (blob.size === 0) {
+            throw new Error("The generated report is empty.");
+        }
+
+        const downloadUrl = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.download = "cloudguard_security_report.pdf";
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        URL.revokeObjectURL(downloadUrl);
+
+        // Show success state
+        spinner.style.display = "none";
+        progress.style.display = "none";
+
+        title.textContent = "Report Downloaded Successfully";
+        message.textContent =
+            "Your CloudGuard AI security report is ready and has been downloaded successfully.";
+
+        caption.textContent = "REPORT GENERATED · DOWNLOAD COMPLETE";
+
+        spinner.style.display = "none";
+
+        const successIcon = document.createElement("div");
+        successIcon.className = "report-status-icon";
+        successIcon.textContent = "✓";
+        spinner.replaceWith(successIcon);
+
+        setTimeout(() => {
+            overlay.classList.remove("active");
+            successIcon.replaceWith(spinner);
+        }, 2500);
+
+    } catch (error) {
+        console.error("Report download error:", error);
+
+        spinner.style.display = "none";
+        progress.style.display = "none";
+
+        title.textContent = "Report Generation Failed";
+        message.textContent =
+            "We couldn't generate your security report. Please try again.";
+
+        caption.textContent = "GENERATION FAILED";
+
+        const errorIcon = document.createElement("div");
+        errorIcon.className = "report-status-icon";
+        errorIcon.style.background = "#ff647c18";
+        errorIcon.style.color = "var(--red)";
+        errorIcon.textContent = "!";
+        spinner.replaceWith(errorIcon);
+
+        setTimeout(() => {
+            overlay.classList.remove("active");
+            errorIcon.replaceWith(spinner);
+        }, 3000);
+    }
+}
+
+
+/* LOAD USER PROFILE */
+
+async function loadUserProfile() {
+    try {
+        const response = await apiFetch("/api/auth/me");
+
+        if (!response.ok) {
+            throw new Error("Unable to load user profile.");
+        }
+
+        const user = await response.json();
+
+        document.getElementById("userCompany").textContent =
+            user.company_name;
+
+        document.getElementById("userEmail").textContent =
+            user.email;
+
+        document.getElementById("userAvatar").textContent =
+            user.company_name.charAt(0).toUpperCase();
+
+    } catch (error) {
+        console.error("User profile error:", error);
+    }
+}
+
+loadUserProfile();
+
+/* SAFE HTML OUTPUT */
+
+function escapeHtml(value) {
+
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+    })[character]);
+
+}
+
+
+/* DASHBOARD STATE */
+
+let dashboardFindings = [];
+let dashboardData = null;
+
+
+/* LOAD DASHBOARD */
+
+async function loadDashboard() {
+
+    const status = document.getElementById("status");
+    const button = document.getElementById("refreshButton");
+
+    button.disabled = true;
+    button.textContent = "Refreshing...";
+
+    status.textContent = "Retrieving security assessment data...";
+    status.classList.remove("error-message");
+
+    try {
+
+        const [
+            summaryResponse,
+            historyResponse,
+            trendsResponse
+        ] = await Promise.all([
+            apiFetch("/api/history/summary"),
+            apiFetch("/api/history/scans"),
+            apiFetch("/api/history/trends")
+        ]);
+
+        if (
+            !summaryResponse.ok ||
+            !historyResponse.ok ||
+            !trendsResponse.ok
+        ) {
+            throw new Error("Unable to retrieve dashboard data.");
+        }
+
+        const summary = await summaryResponse.json();
+        const history = await historyResponse.json();
+        const trendData = await trendsResponse.json();
+
+        const scans = history.scans || [];
+        const trends = trendData.trends || [];
+
+        const latestScan = scans.length ? scans[0] : null;
+
+        dashboardData = {
+            summary,
+            trends
+        };
+
+        dashboardFindings = latestScan?.findings || [];
+
+        /* EXECUTIVE METRICS */
+
+        document.getElementById("totalScans").textContent =
+            summary.total_scans ?? 0;
+
+        document.getElementById("totalFindings").textContent =
+            summary.total_findings ?? 0;
+
+        document.getElementById("highFindings").textContent =
+            summary.high_findings ?? 0;
+
+        document.getElementById("latestResources").textContent =
+            latestScan?.total_resources_scanned ?? 0;
+
+        /* LATEST SCAN METRICS */
+
+        document.getElementById("latestFindings").textContent =
+            latestScan?.total_findings ?? 0;
+
+        document.getElementById("latestHigh").textContent =
+            latestScan?.high_findings ?? 0;
+
+        document.getElementById("latestMedium").textContent =
+            latestScan?.medium_findings ?? 0;
+
+        document.getElementById("latestLow").textContent =
+            latestScan?.low_findings ?? 0;
+
+        document.getElementById("latestScanDate").textContent =
+            latestScan
+                ? "Last scanned: " + formatDate(latestScan.scanned_at)
+                : "No scan available";
+
+        /* RENDER DASHBOARD */
+
+        renderFrameworks(dashboardFindings);
+        renderFindings(dashboardFindings);
+        renderScanHistory(scans);
+
+        drawSeverityChart(summary);
+        drawTrendChart(trends);
+
+        await loadAlerts();
+        await loadSchedulerStatus();
+
+        document.getElementById("connectionTitle").textContent =
+            "Dashboard connected";
+
+        document.getElementById("connectionSubtitle").textContent =
+            "API data available";
+
+        status.textContent =
+            "Data successfully refreshed · " +
+            new Date().toLocaleString();
+
+    } catch (error) {
+
+        status.textContent = error.message;
+        status.classList.add("error-message");
+
+        document.getElementById("connectionTitle").textContent =
+            "Connection issue";
+
+        document.getElementById("connectionSubtitle").textContent =
+            "Dashboard API unavailable";
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "↻  Refresh Data";
+
+    }
+
+}
+
+/* SECURITY ALERTS */
+
+async function loadAlerts() {
+
+const container = document.getElementById("alertsContainer");
+const unreadCount = document.getElementById("unreadAlertCount");
+
+try {
+
+    const [alertsResponse, countResponse] = await Promise.all([
+        apiFetch("/api/history/alerts"),
+        apiFetch("/api/history/alerts/unread-count")
+    ]);
+
+    if (!alertsResponse.ok || !countResponse.ok) {
+        throw new Error("Unable to retrieve security alerts.");
+    }
+
+    const alerts = await alertsResponse.json();
+    const countData = await countResponse.json();
+
+    unreadCount.textContent = `${countData.unread_count} Unread`;
+
+    if (!alerts.length) {
+        container.innerHTML = `
+            <div class="empty">
+                No security alerts available.
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="alert-list">
+
+            ${alerts.map(alert => `
+
+                <div class="alert-item ${alert.is_read ? "" : "unread"}">
+
+                    <div class="alert-content">
+
+                        <div class="alert-title">
+                            ${escapeHtml(alert.resource_name)}
+                        </div>
+
+                        <div class="alert-description">
+                            ${escapeHtml(alert.issue)}
+                        </div>
+
+                        <div class="alert-meta">
+
+                            <span class="alert-status ${alert.is_read ? "read" : ""}">
+                                ${alert.is_read ? "READ" : "UNREAD"}
+                            </span>
+
+                            <span class="alert-time">
+                                ${escapeHtml(formatDate(alert.created_at))}
+                            </span>
+
+                            <span class="alert-time">
+                                ${escapeHtml(alert.severity.toUpperCase())} SEVERITY
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    ${
+                        alert.is_read
+                        ? ""
+                        : `<button class="alert-read-btn"
+                            onclick="markAlertAsRead(${Number(alert.id)})">
+                            Mark as Read
+                           </button>`
+                    }
+
+                </div>
+
+            `).join("")}
+
+        </div>
+    `;
+
+} catch (error) {
+
+    container.innerHTML = `
+        <div class="empty error-message">
+            ${escapeHtml(error.message)}
+        </div>
+    `;
+
+}
+
+}
+
+async function loadSchedulerStatus() {
+    const statusElement = document.getElementById("schedulerStatus");
+    const nextScanElement = document.getElementById("nextScheduledScan");
+    const messageElement = document.getElementById("schedulerMessage");
+
+    try {
+        const response = await apiFetch("/api/history/scheduler/status");
+
+        if (!response.ok) {
+            throw new Error("Unable to retrieve scheduler status.");
+        }
+
+        const data = await response.json();
+
+        statusElement.textContent = data.scheduler_running
+            ? "Active"
+            : "Inactive";
+
+        nextScanElement.textContent = data.next_run_time
+            ? new Date(data.next_run_time).toLocaleString()
+            : "No upcoming scan scheduled";
+
+        messageElement.textContent = data.message;
+
+    } catch (error) {
+        statusElement.textContent = "Unavailable";
+        nextScanElement.textContent = "Unable to retrieve schedule";
+        messageElement.textContent = error.message;
+    }
+}
+
+async function runScanNow() {
+    const button = document.getElementById("runScanButton");
+    const message = document.getElementById("schedulerMessage");
+
+    button.disabled = true;
+    button.textContent = "Running Scan...";
+
+    message.textContent = "Security scan is running. Please wait...";
+
+    try {
+        const response = await apiFetch(
+            "/api/history/scheduler/run-now",
+            {
+                method: "POST"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.detail || "Security scan failed."
+            );
+        }
+
+        await loadDashboard();
+
+        message.textContent =
+            `${data.message} New: ${data.new_findings}, ` +
+            `Resolved: ${data.resolved_findings}, ` +
+            `Existing: ${data.existing_findings}.`;
+
+    } catch (error) {
+        message.textContent = error.message;
+
+    } finally {
+        button.disabled = false;
+        button.textContent = "▶ Run Scan Now";
+    }
+}
+
+/* MARK ALERT AS READ */
+
+async function markAlertAsRead(alertId) {
+
+try {
+
+    const response = await apiFetch(
+        `/api/history/alerts/${alertId}/read`,
+        {
+            method: "PATCH"
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Unable to update alert status.");
+    }
+
+    await loadAlerts();
+
+} catch (error) {
+
+    alert(error.message);
+
+}
+
+}
+
+
+/* DATE FORMAT */
+
+function formatDate(value) {
+
+    if (!value) return "Unavailable";
+
+    const date = new Date(value);
+
+    return Number.isNaN(date.getTime())
+        ? "Unavailable"
+        : date.toLocaleString();
+
+}
+
+
+/* COMPLIANCE FRAMEWORKS */
+
+function renderFrameworks(findings) {
+
+    const container = document.getElementById("frameworkList");
+
+    const frameworks = {};
+
+    findings.forEach(finding => {
+
+        (finding.compliance || []).forEach(control => {
+
+            const name = control.name || "Other";
+
+            if (!frameworks[name]) {
+                frameworks[name] = {
+                    controls:new Map(),
+                    mappings:0
+                };
+            }
+
+            const code = control.control || "Reference unavailable";
+
+            frameworks[name].controls.set(
+                code,
+                control.description || ""
+            );
+
+            frameworks[name].mappings++;
+
+        });
+
+    });
+
+    const names = Object.keys(frameworks);
+
+    if (!names.length) {
+
+        container.innerHTML = `
+            <div class="panel empty" style="grid-column:1/-1">
+                No compliance framework references were found
+                in the latest scan.
+            </div>
+        `;
+
+        return;
+
+    }
+
+    container.innerHTML = names.map(name => {
+
+        const framework = frameworks[name];
+
+        const controls = [...framework.controls.entries()];
+
+        const description = name === "ISO 27001"
+            ? "Information security management framework references associated with identified security findings."
+            : name === "SOC 2"
+                ? "Trust Services Criteria references associated with identified security findings."
+                : "Compliance framework references associated with identified findings.";
+
+        return `
+            <div class="framework">
+
+                <div class="framework-top">
+                    <div class="framework-name">
+                        ${escapeHtml(name)}
+                    </div>
+
+                    <div class="framework-count">
+                        ${controls.length} controls referenced
+                    </div>
+                </div>
+
+                <p class="framework-description">
+                    ${escapeHtml(description)}
+                </p>
+
+                <p class="framework-description">
+                    ${framework.mappings} finding-to-control mappings
+                    in the latest scan.
+                </p>
+
+                <div class="controls">
+                    ${controls.map(([code,detail]) => `
+                        <span
+                            class="control"
+                            title="${escapeHtml(detail)}"
+                        >
+                            ${escapeHtml(code)}
+                        </span>
+                    `).join("")}
+                </div>
+
+            </div>
+        `;
+
+    }).join("");
+
+}
+
+
+/* FINDINGS TABLE */
+
+function renderFindings(findings) {
+
+    if (!findings.length) {
+
+        document.getElementById("findingsTable").innerHTML = `
+            <tr>
+                <td colspan="5" class="empty">
+                    No findings were recorded in the latest scan.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+    filterFindings();
+
+}
+
+
+function filterFindings() {
+
+    const search = document
+        .getElementById("findingSearch")
+        .value
+        .toLowerCase();
+
+    const severity = document
+        .getElementById("severityFilter")
+        .value;
+
+    const table = document.getElementById("findingsTable");
+
+    const filtered = dashboardFindings
+
+        .map((finding,index) => ({
+            finding,
+            index
+        }))
+
+        .filter(({finding}) => {
+
+            const text = [
+                finding.resource_name,
+                finding.issue,
+                ...(finding.compliance || []).map(item =>
+                    `${item.name} ${item.control}`
+                )
+            ].join(" ").toLowerCase();
+
+            return text.includes(search) &&
+                (
+                    severity === "all" ||
+                    String(finding.severity).toLowerCase() === severity
+                );
+
+        });
+
+    if (!filtered.length) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty">
+                    No findings match your search or severity filter.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+    table.innerHTML = filtered.map(({finding,index}) => {
+
+        const level = String(
+            finding.severity || "unknown"
+        ).toLowerCase();
+
+        const badgeClass = [
+            "high",
+            "medium",
+            "low"
+        ].includes(level)
+            ? level
+            : "unknown";
+
+        const references = (finding.compliance || [])
+            .map(item => `${item.name} ${item.control}`)
+            .join(", ");
+
+        return `
+            <tr>
+
+                <td class="resource-name">
+                    ${escapeHtml(finding.resource_name || "Unknown")}
+                </td>
+
+                <td class="issue-name">
+                    ${escapeHtml(finding.issue || "Unknown issue")}
+                </td>
+
+                <td>
+                    <span class="severity ${badgeClass}">
+                        ${escapeHtml(level.toUpperCase())}
+                    </span>
+                </td>
+
+                <td class="reference-text">
+                    ${escapeHtml(references || "Not mapped")}
+                </td>
+
+                <td>
+                    <button
+                        class="investigate-btn"
+                        onclick="investigateFinding(${index})"
+                    >
+                        ✦ Investigate
+                    </button>
+                </td>
+
+            </tr>
+        `;
+
+    }).join("");
+
+}
+
+
+/* SAFE INLINE MARKDOWN FORMATTER */
+
+function formatInlineMarkdown(text) {
+
+    let safe = escapeHtml(text);
+
+    safe = safe.replace(
+        /\*\*(.+?)\*\*/g,
+        "<strong>$1</strong>"
+    );
+
+    safe = safe.replace(
+        /__(.+?)__/g,
+        "<strong>$1</strong>"
+    );
+
+    safe = safe.replace(
+        /`([^`]+)`/g,
+        "<code>$1</code>"
+    );
+
+    return safe;
+
+}
+
+
+/* FORMAT AI ANALYSIS CONTENT */
+
+function formatAnalysisContent(content) {
+
+    if (!content) {
+        return "<p>No details were returned for this section.</p>";
+    }
+
+    let text = String(content)
+        .replace(/\\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .trim();
+
+    text = text
+        .replace(/\s+[-*]\s+(?=\*\*|[A-Z0-9])/g, "\n- ")
+        .replace(/\s+(\d+[.)])\s+(?=[A-Z*])/g, "\n$1 ");
+
+    const lines = text.split("\n");
+
+    let html = "";
+    let listType = null;
+
+    function closeList() {
+        if (listType) {
+            html += `</${listType}>`;
+            listType = null;
+        }
+    }
+
+    for (const rawLine of lines) {
+
+        const line = rawLine.trim();
+
+        if (!line) {
+            closeList();
+            continue;
+        }
+
+        const bulletMatch = line.match(/^[-*]\s+(.+)/);
+        const numberedMatch = line.match(/^\d+[.)]\s+(.+)/);
+
+        if (bulletMatch || numberedMatch) {
+
+            const desiredList = bulletMatch ? "ul" : "ol";
+
+            if (listType !== desiredList) {
+                closeList();
+                html += `<${desiredList}>`;
+                listType = desiredList;
+            }
+
+            const itemText = bulletMatch
+                ? bulletMatch[1]
+                : numberedMatch[1];
+
+            html += `<li>${formatInlineMarkdown(itemText)}</li>`;
+
+            continue;
+        }
+
+        closeList();
+
+        if (/^#{1,6}\s+/.test(line)) {
+
+            const headingText = line.replace(/^#{1,6}\s+/, "");
+
+            html += `
+                <p>
+                    <strong>${formatInlineMarkdown(headingText)}</strong>
+                </p>
+            `;
+
+        } else {
+
+            html += `<p>${formatInlineMarkdown(line)}</p>`;
+
+        }
+
+    }
+
+    closeList();
+
+    return html || "<p>No analysis details were returned.</p>";
+
+}
+
+
+/* PARSE AI ANALYSIS INTO FOUR SECTIONS */
+
+function parseAnalysisSections(analysis) {
+
+    const text = String(analysis ?? "")
+        .replace(/\\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .trim();
+
+    const sectionNames = [
+        "Risk Explanation",
+        "Potential Impact",
+        "Recommended Remediation",
+        "Risk Priority"
+    ];
+
+    const escapedNames = sectionNames.map(name =>
+        name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+    );
+
+    const headingPattern = new RegExp(
+        "^\\s*(?:#{1,6}\\s*)?(?:\\*\\*)?(?:\\d+[.)]\\s*)?(" +
+        escapedNames.join("|") +
+        ")(?:\\*\\*)?\\s*:?.*$",
+        "i"
+    );
+
+    const lines = text.split("\n");
+
+    const sections = [];
+
+    let currentSection = null;
+
+    lines.forEach(line => {
+
+        const match = line.match(headingPattern);
+
+        if (match) {
+
+            currentSection = {
+                title:sectionNames.find(name =>
+                    name.toLowerCase() === match[1].toLowerCase()
+                ),
+                content:[]
+            };
+
+            sections.push(currentSection);
+
+            return;
+
+        }
+
+        if (currentSection) {
+            currentSection.content.push(line);
+        }
+
+    });
+
+    if (!sections.length) {
+        return [{
+            title:"AI Security Analysis",
+            content:text
+        }];
+    }
+
+    return sections.map(section => ({
+        title:section.title,
+        content:section.content.join("\n").trim()
+    }));
+
+}
+
+
+/* RENDER STRUCTURED AI ANALYSIS */
+
+function renderAIAnalysis(analysis, finding) {
+
+    const sections = parseAnalysisSections(analysis);
+
+    const severity = String(
+        finding?.severity || "unknown"
+    ).toLowerCase();
+
+    const priorityClass = [
+        "high",
+        "medium",
+        "low"
+    ].includes(severity)
+        ? severity
+        : "unknown";
+
+    const priorityLabel = [
+        "high",
+        "medium",
+        "low"
+    ].includes(severity)
+        ? severity.toUpperCase() + " PRIORITY"
+        : "REVIEW REQUIRED";
+
+    const icons = {
+        "Risk Explanation":"◈",
+        "Potential Impact":"⚠",
+        "Recommended Remediation":"✓",
+        "Risk Priority":"!",
+        "AI Security Analysis":"✦"
+    };
+
+    const priorityIcons = {
+        high:"⚠",
+        medium:"◉",
+        low:"✓",
+        unknown:"ⓘ"
+    };
+
+    return `
+        <div class="analysis-banner">
+
+            <div>
+                <div class="analysis-banner-label">
+                    Assessment status
+                </div>
+
+                <div class="analysis-banner-value">
+                    <span>●</span>
+                    AI assessment generated
+                </div>
+            </div>
+
+            <span class="priority-badge ${priorityClass}">
+                ${priorityIcons[priorityClass]}
+                &nbsp;
+                ${escapeHtml(priorityLabel)}
+            </span>
+
+        </div>
+
+        <div class="analysis-heading">
+            <h3>✦ AI Security Analysis</h3>
+            <span>Generated assessment</span>
+        </div>
+
+        <div class="analysis-sections">
+
+            ${sections.map((section,index) => {
+
+                const isPriority =
+                    section.title === "Risk Priority";
+
+                return `
+                    <article class="analysis-card ${isPriority ? "priority-card" : ""}">
+
+                        <div class="analysis-card-header">
+                            <span class="analysis-number">
+                                ${icons[section.title] || (index + 1)}
+                            </span>
+
+                            <h4>
+                                ${escapeHtml(section.title)}
+                            </h4>
+                        </div>
+
+                        <div class="analysis-content">
+                            ${formatAnalysisContent(section.content)}
+                        </div>
+
+                    </article>
+                `;
+
+            }).join("")}
+
+        </div>
+
+        <div class="analysis-disclaimer">
+
+            <span class="analysis-disclaimer-icon">ⓘ</span>
+
+            <div>
+                <strong>AI-generated security guidance</strong>
+
+                Recommendations are generated using AI.
+                Validate the findings and proposed remediation
+                against your Azure environment, security policies
+                and business requirements before making changes.
+
+                AI-generated assessments do not independently
+                verify compliance or confirm that a vulnerability
+                has been exploited.
+            </div>
+
+        </div>
+    `;
+
+}
+
+
+/* AI SECURITY INVESTIGATION */
+
+async function investigateFinding(index) {
+
+    const finding = dashboardFindings[index];
+
+    if (!finding) return;
+
+    const overlay = document.getElementById("investigationOverlay");
+    const result = document.getElementById("investigationResult");
+
+    document.getElementById("investigationResource").textContent =
+        finding.resource_name || "Unknown resource";
+
+    const principalElement = document.getElementById(
+        "investigationPrincipal"
+    );
+
+    if (finding.resource_id) {
+
+        principalElement.textContent =
+            "Principal ID: " + finding.resource_id;
+
+        principalElement.style.display = "block";
+
+    } else {
+
+        principalElement.textContent = "";
+        principalElement.style.display = "none";
+
+    }
+
+    document.getElementById("investigationIssue").textContent =
+        finding.issue || "Unknown security issue";
+
+    overlay.classList.add("show");
+    document.body.style.overflow = "hidden";
+
+    result.innerHTML = `
+        <div class="investigation-loading">
+
+            <div class="analysis-loading-icon">✦</div>
+
+            AI Security Analyst is investigating this finding...
+
+            <br><br>
+
+            Evaluating risk, potential impact and remediation guidance.
+
+        </div>
+    `;
+
+    try {
+
+        const response = await apiFetch("/api/security/analyze", {
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify(finding)
+
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.detail || "AI investigation failed.");
+        }
+
+        if (!data.analysis) {
+            throw new Error("The AI service returned an empty assessment.");
+        }
+
+        result.innerHTML = renderAIAnalysis(
+            data.analysis,
+            finding
+        );
+
+    } catch (error) {
+
+        result.innerHTML = `
+            <div class="analysis-error">
+
+                <strong>Investigation unavailable</strong>
+
+                <br><br>
+
+                ${escapeHtml(error.message)}
+
+                <br><br>
+
+                Check that your API server and AI configuration
+                are working correctly.
+
+            </div>
+        `;
+
+    }
+
+}
+
+
+/* CLOSE INVESTIGATION */
+
+function closeInvestigation() {
+
+    document
+        .getElementById("investigationOverlay")
+        .classList.remove("show");
+
+    document.body.style.overflow = "";
+
+}
+
+
+/* CLOSE MODALS WITH ESCAPE */
+
+document.addEventListener("keydown", event => {
+
+    if (event.key === "Escape") {
+
+        closeInvestigation();
+
+        const scanOverlay = document.getElementById("scanDetailsOverlay");
+
+        if (scanOverlay) {
+            closeScanDetails();
+        }
+
+    }
+
+});
+
+
+/* SCAN HISTORY */
+
+function renderScanHistory(scans) {
+
+    const table = document.getElementById("scanTable");
+
+    if (!scans.length) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="8" class="empty">
+                    No saved security scans are available.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+    table.innerHTML = scans.map(scan => `
+
+        <tr
+            class="clickable-scan"
+            onclick="viewScanDetails(${Number(scan.id)})"
+            title="Click to view scan details"
+        >
+
+            <td class="blue">
+                #${escapeHtml(scan.id)}
+            </td>
+
+            <td>
+                ${escapeHtml(formatDate(scan.scanned_at))}
+            </td>
+
+            <td>
+                ${escapeHtml(scan.total_resources_scanned)}
+            </td>
+
+            <td>
+                ${escapeHtml(scan.total_findings)}
+            </td>
+
+            <td class="red">
+                ${escapeHtml(scan.high_findings)}
+            </td>
+
+            <td class="orange">
+                ${escapeHtml(scan.medium_findings)}
+            </td>
+
+            <td class="green">
+                ${escapeHtml(scan.low_findings)}
+            </td>
+
+            <td>
+                <button
+                    class="view-scan-btn"
+                    onclick="event.stopPropagation(); viewScanDetails(${Number(scan.id)})"
+                >
+                    View Details →
+                </button>
+            </td>
+
+        </tr>
+
+    `).join("");
+
+}
+
+
+/* VIEW INDIVIDUAL SCAN DETAILS */
+
+async function viewScanDetails(scanId) {
+
+    try {
+
+        const response = await apiFetch(
+            `/api/history/scans/${scanId}`
+        );
+
+        if (!response.ok) {
+            throw new Error("Unable to retrieve scan details.");
+        }
+
+        const scan = await response.json();
+
+        const findings = scan.findings || [];
+
+        const overlay = document.createElement("div");
+
+        overlay.id = "scanDetailsOverlay";
+        overlay.className = "scan-details-overlay";
+
+        const findingCards = findings.length
+
+            ? findings.map(finding => `
+
+                <div class="scan-finding-card">
+
+                    <div class="scan-finding-name">
+                        ${escapeHtml(finding.resource_name || "Unknown resource")}
+                    </div>
+
+                    <div class="scan-finding-issue">
+                        ${escapeHtml(finding.issue || "No description available")}
+                    </div>
+
+                    <div class="scan-finding-meta">
+                        <strong>Severity:</strong>
+                        ${escapeHtml(finding.severity || "Unknown")}
+                    </div>
+
+                    ${finding.resource_id ? `
+                        <div class="scan-finding-meta scan-finding-id">
+                            Principal ID:
+                            ${escapeHtml(finding.resource_id)}
+                        </div>
+                    ` : ""}
+
+                    <div class="scan-compliance">
+
+                        <strong>Compliance References</strong>
+
+                        ${(finding.compliance || []).map(control => `
+                            <div class="scan-compliance-item">
+                                ${escapeHtml(control.name)} -
+                                ${escapeHtml(control.control)}
+                                (${escapeHtml(control.description)})
+                            </div>
+                        `).join("") || `
+                            <div class="scan-compliance-item">
+                                No compliance references available.
+                            </div>
+                        `}
+
+                    </div>
+
+                </div>
+
+            `).join("")
+
+            : `
+                <p class="empty">
+                    No security findings were recorded in this scan.
+                </p>
+            `;
+
+        overlay.innerHTML = `
+
+            <div class="scan-details-modal">
+
+                <div class="scan-details-header">
+
+                    <div>
+                        <h2>
+                            Scan #${escapeHtml(scan.id)}
+                        </h2>
+
+                        <p class="scan-details-date">
+                            ${escapeHtml(formatDate(scan.scanned_at))}
+                        </p>
+                    </div>
+
+                    <button
+                        class="close-scan-details"
+                        onclick="closeScanDetails()"
+                        aria-label="Close scan details"
+                    >
+                        ✕
+                    </button>
+
+                </div>
+
+                <div class="scan-details-metrics">
+
+                    <div class="scan-details-metric">
+                        <strong>
+                            ${escapeHtml(scan.total_resources_scanned)}
+                        </strong>
+                        <p>Resources</p>
+                    </div>
+
+                    <div class="scan-details-metric">
+                        <strong>
+                            ${escapeHtml(scan.total_findings)}
+                        </strong>
+                        <p>Total Findings</p>
+                    </div>
+
+                    <div class="scan-details-metric">
+                        <strong class="red">
+                            ${escapeHtml(scan.high_findings)}
+                        </strong>
+                        <p>High Risk</p>
+                    </div>
+
+                    <div class="scan-details-metric">
+                        <strong class="orange">
+                            ${escapeHtml(scan.medium_findings)}
+                        </strong>
+                        <p>Medium Risk</p>
+                    </div>
+
+                    <div class="scan-details-metric">
+                        <strong class="green">
+                            ${escapeHtml(scan.low_findings)}
+                        </strong>
+                        <p>Low Risk</p>
+                    </div>
+
+                </div>
+
+                <div class="scan-details-findings">
+
+                    <h3>Security Findings</h3>
+
+                    ${findingCards}
+
+                </div>
+
+            </div>
+
+        `;
+
+        document.body.appendChild(overlay);
+
+        document.body.style.overflow = "hidden";
+
+        overlay.addEventListener("click", event => {
+
+            if (event.target === overlay) {
+                closeScanDetails();
+            }
+
+        });
+
+    } catch (error) {
+
+        alert(error.message);
+
+    }
+
+}
+
+
+/* CLOSE SCAN DETAILS */
+
+function closeScanDetails() {
+
+    const overlay = document.getElementById("scanDetailsOverlay");
+
+    if (overlay) {
+        overlay.remove();
+    }
+
+    if (
+        !document.getElementById("investigationOverlay")
+            .classList.contains("show")
+    ) {
+        document.body.style.overflow = "";
+    }
+
+}
+
+
+/* CHART CONFIGURATION */
+
+function setupCanvas(canvas) {
+
+    const width = Math.max(canvas.clientWidth,250);
+    const height = 230;
+
+    const ratio = window.devicePixelRatio || 1;
+
+    canvas.width = width * ratio;
+    canvas.height = height * ratio;
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.setTransform(ratio,0,0,ratio,0,0);
+    ctx.clearRect(0,0,width,height);
+
+    return {
+        ctx,
+        width,
+        height
+    };
+
+}
+
+
+/* SEVERITY CHART */
+
+function drawSeverityChart(summary) {
+
+    const canvas = document.getElementById("severityChart");
+
+    const {ctx,width} = setupCanvas(canvas);
+
+    const values = [
+        summary.high_findings || 0,
+        summary.medium_findings || 0,
+        summary.low_findings || 0
+    ];
+
+    const labels = [
+        "High",
+        "Medium",
+        "Low"
+    ];
+
+    const colors = [
+        "#ff647c",
+        "#ffb45e",
+        "#4ed6a0"
+    ];
+
+    const maxValue = Math.max(...values,1);
+
+    const chartTop = 20;
+    const chartBottom = 175;
+    const chartHeight = chartBottom-chartTop;
+
+    const barWidth = Math.min(60,width/6);
+
+    const centers = [
+        width/6,
+        width/2,
+        width*5/6
+    ];
+
+    values.forEach((value,index) => {
+
+        const barHeight = value > 0
+            ? Math.max(3,value/maxValue*chartHeight)
+            : 0;
+
+        const x = centers[index]-barWidth/2;
+        const y = chartBottom-barHeight;
+
+        ctx.fillStyle = "#22354e";
+
+        ctx.beginPath();
+
+        ctx.roundRect(
+            x,
+            chartTop,
+            barWidth,
+            chartHeight,
+            6
+        );
+
+        ctx.fill();
+
+        if (value > 0) {
+
+            ctx.fillStyle = colors[index];
+
+            ctx.beginPath();
+
+            ctx.roundRect(
+                x,
+                y,
+                barWidth,
+                barHeight,
+                6
+            );
+
+            ctx.fill();
+
+        }
+
+        ctx.fillStyle = "#edf3fc";
+        ctx.font = "bold 13px Arial";
+        ctx.textAlign = "center";
+
+        ctx.fillText(
+            value,
+            centers[index],
+            y-9
+        );
+
+        ctx.fillStyle = "#91a4bd";
+        ctx.font = "11px Arial";
+
+        ctx.fillText(
+            labels[index],
+            centers[index],
+            202
+        );
+
+    });
+
+}
+
+
+/* TREND CHART */
+
+function drawTrendChart(trends) {
+
+    const canvas = document.getElementById("trendChart");
+
+    const {ctx,width} = setupCanvas(canvas);
+
+    if (!trends.length) {
+
+        ctx.fillStyle = "#91a4bd";
+        ctx.font = "12px Arial";
+        ctx.textAlign = "center";
+
+        ctx.fillText(
+            "No scan history available",
+            width/2,
+            115
+        );
+
+        return;
+
+    }
+
+    const padding = 34;
+
+    const top = 23;
+    const bottom = 174;
+
+    const chartWidth = width-padding*2;
+    const chartHeight = bottom-top;
+
+    const maxValue = Math.max(
+        ...trends.map(scan => scan.total_findings),
+        1
+    );
+
+    for (let i=0;i<=4;i++) {
+
+        const y = top+i*chartHeight/4;
+
+        ctx.strokeStyle = "#293b53";
+        ctx.lineWidth = 1;
+
+        ctx.beginPath();
+        ctx.moveTo(padding,y);
+        ctx.lineTo(width-padding,y);
+        ctx.stroke();
+
+    }
+
+    const points = trends.map((scan,index) => ({
+
+        x:trends.length===1
+            ? width/2
+            : padding+index*chartWidth/(trends.length-1),
+
+        y:bottom-scan.total_findings/maxValue*chartHeight,
+
+        value:scan.total_findings
+
+    }));
+
+    if (points.length>1) {
+
+        ctx.beginPath();
+
+        points.forEach((point,index) => {
+
+            if (index===0) {
+                ctx.moveTo(point.x,point.y);
+            } else {
+                ctx.lineTo(point.x,point.y);
+            }
+
+        });
+
+        ctx.strokeStyle = "#55a8ff";
+        ctx.lineWidth = 2.5;
+        ctx.lineJoin = "round";
+        ctx.stroke();
+
+    }
+
+    points.forEach(point => {
+
+        ctx.fillStyle = "#55a8ff";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            point.x,
+            point.y,
+            5,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+        ctx.strokeStyle = "#101c2e";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.fillStyle = "#edf3fc";
+        ctx.font = "11px Arial";
+        ctx.textAlign = "center";
+
+        ctx.fillText(
+            point.value,
+            point.x,
+            point.y-12
+        );
+
+    });
+
+    ctx.fillStyle = "#91a4bd";
+    ctx.font = "10px Arial";
+    ctx.textAlign = "center";
+
+    ctx.fillText(
+        "Scan sequence",
+        width/2,
+        214
+    );
+
+}
+
+
+/* REDRAW CHARTS ON RESIZE */
+
+let resizeTimeout;
+
+window.addEventListener("resize",() => {
+
+    clearTimeout(resizeTimeout);
+
+    resizeTimeout = setTimeout(() => {
+
+        if (dashboardData) {
+
+            drawSeverityChart(dashboardData.summary);
+            drawTrendChart(dashboardData.trends);
+
+        }
+
+    },150);
+
+});
+
+
+/* INITIALISE DASHBOARD */
+
+loadDashboard();
+
+
+
+/* =========================================
+   CLOUDGUARD AI — SIDEBAR NAVIGATION
+========================================= */
+
+const sidebarLinks = document.querySelectorAll(
+    ".sidebar .nav-link[href^='#']:not([href='#'])"
+);
+
+const navigationSections = [];
+
+sidebarLinks.forEach(link => {
+    const target = document.querySelector(
+        link.getAttribute("href")
+    );
+
+    if (target) {
+        navigationSections.push({
+            link,
+            section: target
+        });
+    }
+});
+
+let navigationAnimation = null;
+let isProgrammaticScrolling = false;
+let scrollAnimationFrame = null;
+
+
+/* FIND SECTION HEADING */
+
+function getSectionHeading(section) {
+    if (!section) return null;
+
+    if (section.classList.contains("section-heading")) {
+        return section;
+    }
+
+    return section.querySelector(".section-heading");
+}
+
+
+/* SET ACTIVE SIDEBAR AND SECTION */
+
+function setActiveLink(selectedLink) {
+
+    sidebarLinks.forEach(link => {
+        link.classList.remove("active");
+        link.removeAttribute("aria-current");
+    });
+
+    document.querySelectorAll(".section-heading.section-current")
+        .forEach(heading => {
+            heading.classList.remove("section-current");
+        });
+
+    if (!selectedLink) return;
+
+    selectedLink.classList.add("active");
+    selectedLink.setAttribute("aria-current", "page");
+
+    const section = document.querySelector(
+        selectedLink.getAttribute("href")
+    );
+
+    const heading = getSectionHeading(section);
+
+    if (heading) {
+        heading.classList.add("section-current");
+    }
+}
+
+
+/* GET LINK FOR SECTION */
+
+function getLinkForSection(section) {
+    return navigationSections.find(
+        item => item.section === section
+    )?.link || null;
+}
+
+
+/* NAVIGATE TO SECTION */
+
+function navigateToSection(link) {
+
+    const target = document.querySelector(
+        link.getAttribute("href")
+    );
+
+    if (!target) return;
+
+    if (navigationAnimation !== null) {
+        cancelAnimationFrame(navigationAnimation);
+        navigationAnimation = null;
+    }
+
+    setActiveLink(link);
+
+    const startPosition = window.scrollY;
+
+    const targetPosition =
+        target.getBoundingClientRect().top +
+        window.scrollY - 25;
+
+    const distance = targetPosition - startPosition;
+    const duration = 900;
+
+    let startTime = null;
+
+    isProgrammaticScrolling = true;
+
+    function animateScroll(timestamp) {
+
+        if (!startTime) startTime = timestamp;
+
+        const progress = Math.min(
+            (timestamp - startTime) / duration,
+            1
+        );
+
+        const easing = 1 - Math.pow(1 - progress, 4);
+
+        window.scrollTo(
+            0,
+            startPosition + distance * easing
+        );
+
+        if (progress < 1) {
+
+            navigationAnimation =
+                requestAnimationFrame(animateScroll);
+
+        } else {
+
+            navigationAnimation = null;
+            isProgrammaticScrolling = false;
+
+            setActiveLink(link);
+
+        }
+    }
+
+    navigationAnimation =
+        requestAnimationFrame(animateScroll);
+}
+
+
+/* SIDEBAR CLICK EVENTS */
+
+sidebarLinks.forEach(link => {
+
+    link.addEventListener("click", event => {
+
+        event.preventDefault();
+
+        navigateToSection(link);
+
+    });
+
+});
+
+
+
+
+
+
+
+
+/* INITIALISE NAVIGATION */
+
+function initialiseSidebarNavigation() {
+
+    if (!navigationSections.length) return;
+
+    const overviewLink = getLinkForSection(
+        document.getElementById("overview")
+    );
+
+    setActiveLink(
+        overviewLink || navigationSections[0].link
+    );
+
+}
+
+initialiseSidebarNavigation();
+
+
+/* BROWSER BACK/FORWARD SUPPORT */
+
+window.addEventListener("hashchange", () => {
+
+    const matchingLink = Array.from(sidebarLinks).find(
+        link => link.getAttribute("href") === window.location.hash
+    );
+
+    if (matchingLink) {
+        setActiveLink(matchingLink);
+    }
+
+});
+
+
+
+</script>
+
+
+<!-- SECURITY REPORT LOADING OVERLAY -->
+
+<div class="report-overlay" id="reportOverlay">
+    <div class="report-loader-card">
+
+        <div class="report-spinner" id="reportSpinner"></div>
+
+        <div class="report-loader-title" id="reportLoaderTitle">
+            Generating Security Report
+        </div>
+
+        <p class="report-loader-message" id="reportLoaderMessage">
+            Running security analysis and preparing your PDF report.
+            Please wait while we process your security findings.
+        </p>
+
+        <div class="report-progress-track" id="reportProgress">
+            <div class="report-progress-bar"></div>
+        </div>
+
+        <div class="report-loader-caption" id="reportLoaderCaption">
+            CLOUDGUARD AI · SECURITY INTELLIGENCE
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+</html>

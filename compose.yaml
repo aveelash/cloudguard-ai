@@ -1,0 +1,20 @@
+
+services:
+  cloudguard-ai:
+    build: .
+    image: cloudguard-ai:local
+    container_name: cloudguard-ai
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: sqlite:////data/cloudguard.db
+      APP_ENV: production
+      DEBUG: "False"
+    volumes:
+      - cloudguard_data:/data
+    restart: unless-stopped
+
+volumes:
+  cloudguard_data:

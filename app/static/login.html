@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080f1d">
+
+    <title>CloudGuard AI | Sign In</title>
+
+    <style>
+        :root {
+            --bg: #080f1d;
+            --surface: #101c2e;
+            --surface-2: #14233a;
+            --border: #263750;
+            --text: #edf3fc;
+            --muted: #91a4bd;
+            --blue: #55a8ff;
+            --cyan: #40d5d0;
+            --red: #ff647c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background:
+                radial-gradient(circle at 15% 15%, #17375a55, transparent 35%),
+                radial-gradient(circle at 85% 85%, #123d4650, transparent 35%),
+                var(--bg);
+            color: var(--text);
+            font-family: Inter, Arial, sans-serif;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 430px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .brand-logo {
+            width: 45px;
+            height: 45px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: linear-gradient(135deg, var(--blue), var(--cyan));
+            color: #071321;
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .brand-name {
+            font-size: 21px;
+            font-weight: 750;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-caption {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 9px;
+            letter-spacing: 2px;
+        }
+
+        .login-card {
+            padding: 36px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: linear-gradient(145deg, #14243a, #0d1829);
+            box-shadow: 0 25px 80px #00000055;
+        }
+
+        .eyebrow {
+            margin-bottom: 12px;
+            color: var(--cyan);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-size: 27px;
+            letter-spacing: -0.8px;
+        }
+
+        .subtitle {
+            margin-bottom: 30px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 9px;
+            font-size: 12px;
+            font-weight: 650;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 15px;
+            outline: none;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: #091526;
+            color: var(--text);
+            font-size: 13px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px #55a8ff20;
+        }
+
+        input::placeholder {
+            color: #71849c;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 65px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 13px;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+            color: var(--blue);
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .login-button {
+            width: 100%;
+            margin-top: 8px;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: linear-gradient(100deg, var(--blue), var(--cyan));
+            color: #071321;
+            font-size: 13px;
+            font-weight: 750;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.92;
+        }
+
+        .login-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .error-message {
+            display: none;
+            margin-bottom: 18px;
+            padding: 12px;
+            border: 1px solid #ff647c55;
+            border-radius: 8px;
+            background: #ff647c12;
+            color: var(--red);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .security-note {
+            margin-top: 24px;
+            padding-top: 19px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.7;
+            text-align: center;
+        }
+
+        .security-note span {
+            color: var(--cyan);
+        }
+
+        .footer {
+            margin-top: 25px;
+            color: #647991;
+            font-size: 10px;
+            letter-spacing: 1.3px;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 27px 22px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="brand">
+        <div class="brand-logo">C</div>
+
+        <div>
+            <div class="brand-name">CloudGuard AI</div>
+            <div class="brand-caption">SECURITY INTELLIGENCE</div>
+        </div>
+    </div>
+
+    <main class="login-card">
+
+        <div class="eyebrow">Secure workspace access</div>
+
+        <h1>Welcome back.</h1>
+
+        <p class="subtitle">
+            Sign in to access your cloud security and compliance
+            command centre.
+        </p>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+                <label for="email">Email address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    autocomplete="username"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        id="togglePassword"
+                    >
+                        Show
+                    </button>
+                </div>
+            </div>
+
+            <button
+                type="submit"
+                class="login-button"
+                id="loginButton"
+            >
+                Sign In →
+            </button>
+
+        </form>
+
+        <div class="security-note">
+            <span>●</span>
+            Protected access to your security workspace
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        CLOUDGUARD AI · CLOUD SECURITY PLATFORM
+    </footer>
+
+</div>
+
+<script>
+    const loginForm = document.getElementById("loginForm");
+    const loginButton = document.getElementById("loginButton");
+    const errorMessage = document.getElementById("errorMessage");
+    const passwordInput = document.getElementById("password");
+
+    document.getElementById("togglePassword").addEventListener("click", () => {
+        const isPassword = passwordInput.type === "password";
+
+        passwordInput.type = isPassword ? "text" : "password";
+
+        document.getElementById("togglePassword").textContent =
+            isPassword ? "Hide" : "Show";
+    });
+
+    loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        errorMessage.style.display = "none";
+        loginButton.disabled = true;
+        loginButton.textContent = "Authenticating...";
+
+        try {
+            const response = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: document.getElementById("email").value.trim(),
+                    password: passwordInput.value
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.detail || "Login failed.");
+            }
+
+            sessionStorage.setItem("cloudguard_token", data.access_token);
+
+            const verifyResponse = await fetch("/api/auth/me", {
+                headers: {
+                    "Authorization": `Bearer ${data.access_token}`
+                }
+            });
+
+            if (!verifyResponse.ok) {
+                sessionStorage.removeItem("cloudguard_token");
+                throw new Error("Unable to verify your account.");
+            }
+
+            window.location.href = "/dashboard";
+
+        } catch (error) {
+            errorMessage.textContent = error.message;
+            errorMessage.style.display = "block";
+
+        } finally {
+            loginButton.disabled = false;
+            loginButton.textContent = "Sign In →";
+        }
+    });
+</script>
+
+</body>
+</html>
