@@ -1,7 +1,6 @@
 from types import SimpleNamespace
 
 from app.security.authorization_rules import check_role_assignment
-from app.core.config import settings
 
 
 def create_assignment(role_scope, principal_id):
@@ -15,9 +14,9 @@ def create_assignment(role_scope, principal_id):
 
 def test_authorization_rules():
 
-    subscription_scope = (
-        f"/subscriptions/{settings.AZURE_SUBSCRIPTION_ID}"
-    )
+    subscription_id = "test-subscription-123"
+
+    subscription_scope = f"/subscriptions/{subscription_id}"
 
     sample_assignments = [
         (create_assignment(subscription_scope, "user-001"), "Owner"),
@@ -38,7 +37,7 @@ def test_authorization_rules():
         findings = check_role_assignment(
             assignment,
             role_name,
-            settings.AZURE_SUBSCRIPTION_ID
+            subscription_id
         )
         all_findings.extend(findings)
 
