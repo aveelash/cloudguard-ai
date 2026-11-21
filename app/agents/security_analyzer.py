@@ -1,4 +1,4 @@
-
+import logging
 from typing import TypedDict
 
 from langchain_openai import ChatOpenAI
@@ -88,7 +88,19 @@ def analyze_security_finding(state: SecurityAnalysisState):
     - Do not claim that remediation has already been performed.
     """
 
-    response = llm.invoke(prompt)
+    try:
+        response = llm.invoke(prompt)
+    except Exception as exc:
+        original_error = exc.__cause__ or exc
+
+        logging.error(
+            "OpenAI API request failed: type=%s, status=%s, details=%s",
+            type(original_error).__name__,
+            getattr(original_error, "status_code", None),
+            getattr(original_error, "body", None)
+        )
+
+        raise
 
     return {
         "analysis": response.content
