@@ -1,4 +1,4 @@
-
+import logging
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from app.azure.connection_service import get_azure_connection
@@ -89,6 +89,7 @@ def analyze_security_finding(
         }
 
     except Exception:
+        logging.exception("AI security analysis failed")
         raise HTTPException(
             status_code=500,
             detail="An internal error occurred while analyzing the security finding."
