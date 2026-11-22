@@ -60,6 +60,13 @@ def login_page():
     )
     return FileResponse(login_file)
 
+@app.get("/register", include_in_schema=False)
+def register_page():
+    register_file = (
+        Path(__file__).parent / "app" / "static" / "register.html"
+    )
+    return FileResponse(register_file)
+
 @app.get("/dashboard", include_in_schema=False)
 def dashboard():
     dashboard_file = (

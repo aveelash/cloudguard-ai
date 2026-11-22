@@ -2,9 +2,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.auth.dependencies import require_roles
+from app.auth.dependencies import require_roles, get_current_user
+from app.db.models import User, AzureConnection
 from app.db import get_db
-from app.db.models import User
 from app.schemas import AzureConnectionCreate
 from app.azure.connection_service import save_azure_connection
 
@@ -13,6 +13,24 @@ router = APIRouter(
     prefix="/api/azure-connection",
     tags=["Azure Connection"]
 )
+
+@router.get("/status")
+def get_azure_connection_status(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    connection = (
+        db.query(AzureConnection)
+        .filter(
+            AzureConnection.company_id == current_user.company_id
+        )
+        .first()
+    )
+
+    return {
+        "connected": bool(connection and connection.is_active),
+        "can_configure": current_user.role in ("owner", "admin")
+    }
 
 
 @router.post("/")

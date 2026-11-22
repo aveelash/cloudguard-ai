@@ -329,6 +329,28 @@ a {
     margin-right:6px;
 }
 
+.azure-connection-button {
+    margin-top:10px;
+    width:100%;
+    padding:7px 10px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:var(--surface-hover);
+    color:var(--text);
+    font-size:10px;
+    font-weight:600;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.azure-connection-button:hover {
+    background:var(--border);
+}
+
+.azure-connection-button[hidden] {
+    display:none;
+}
+
 /* MAIN */
 
 .main {
@@ -1685,6 +1707,112 @@ html {
     }
 }
 
+/* AZURE CONNECTION MODAL */
+
+.azure-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(3, 9, 20, 0.82);
+    backdrop-filter: blur(12px);
+}
+
+.azure-modal-overlay[hidden] {
+    display: none;
+}
+
+.azure-modal {
+    width: 100%;
+    max-width: 460px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: linear-gradient(145deg, #14243a, #0b1627);
+    box-shadow: 0 25px 90px #00000080;
+}
+
+.azure-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 24px;
+}
+
+.azure-modal-header h2 {
+    font-size: 19px;
+    margin: 0;
+}
+
+.azure-modal-header p {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+.azure-modal-close {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-size: 25px;
+    cursor: pointer;
+}
+
+#azureConnectionForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#azureConnectionForm label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 8px;
+}
+
+#azureConnectionForm input {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+}
+
+#azureConnectionForm input:focus {
+    border-color: var(--accent);
+}
+
+#azureConnectionForm button[type="submit"] {
+    margin-top: 15px;
+    padding: 12px;
+    border: none;
+    border-radius: 7px;
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#azureConnectionForm button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#azureConnectionMessage {
+    font-size: 12px;
+    margin: 5px 0;
+}
+
 
 /* SECURITY REPORT LOADING OVERLAY */
 
@@ -1857,12 +1985,23 @@ html {
     <div class="sidebar-bottom">
         <div class="connection-card">
             <div class="connection-title">
-                <span class="connection-dot"></span>Cloud environment
+                <span class="connection-dot" id="azureConnectionDot"></span>
+                Cloud environment
             </div>
 
-            <div class="connection-description">
-                Azure scan integration
+            <div class="connection-description" id="azureConnectionStatus">
+                Checking Azure connection...
             </div>
+
+            <button
+                type="button"
+                id="azureConnectionButton"
+                class="azure-connection-button"
+                onclick="openAzureConnectionModal()"
+                hidden
+            >
+                Connect Azure
+            </button>
         </div>
 
         <button class="logout-button" onclick="logoutUser()">
@@ -2397,7 +2536,7 @@ async function apiFetch(url, options = {}) {
         headers
     });
 
-    if (response.status === 401 || response.status === 403) {
+    if (response.status === 401) {
         sessionStorage.removeItem("cloudguard_token");
         window.location.replace("/login");
         throw new Error("Session expired. Please sign in again.");
@@ -2411,6 +2550,103 @@ async function apiFetch(url, options = {}) {
 function logoutUser() {
     sessionStorage.removeItem("cloudguard_token");
     window.location.replace("/login");
+}
+
+/* AZURE CONNECTION MANAGEMENT */
+
+async function loadAzureConnectionStatus() {
+    const status = document.getElementById("azureConnectionStatus");
+    const dot = document.getElementById("azureConnectionDot");
+    const button = document.getElementById("azureConnectionButton");
+
+    try {
+        const response = await apiFetch("/api/azure-connection/status");
+
+        if (!response.ok) {
+            throw new Error("Unable to check Azure connection.");
+        }
+
+        const data = await response.json();
+
+        if (data.connected) {
+            status.textContent = "Azure subscription connected";
+            button.textContent = "Update Connection";
+            dot.style.background = "var(--green)";
+        } else {
+            status.textContent = "Azure subscription not connected";
+            button.textContent = "Connect Azure";
+            dot.style.background = "var(--muted)";
+        }
+
+        button.hidden = !data.can_configure;
+
+    } catch (error) {
+        console.error("Azure connection status error:", error);
+        status.textContent = "Unable to check Azure connection";
+        button.hidden = true;
+    }
+}
+
+function openAzureConnectionModal() {
+    document.getElementById("azureConnectionModal").hidden = false;
+}
+
+function closeAzureConnectionModal() {
+    document.getElementById("azureConnectionModal").hidden = true;
+    document.getElementById("azureConnectionMessage").textContent = "";
+}
+
+async function saveAzureConnection(event) {
+    event.preventDefault();
+
+    const form = document.getElementById("azureConnectionForm");
+    const message = document.getElementById("azureConnectionMessage");
+    const button = document.getElementById("saveAzureConnectionButton");
+
+    const credentials = {
+        tenant_id: document.getElementById("azureTenantId").value.trim(),
+        client_id: document.getElementById("azureClientId").value.trim(),
+        client_secret: document.getElementById("azureClientSecret").value,
+        subscription_id: document.getElementById("azureSubscriptionId").value.trim()
+    };
+
+    button.disabled = true;
+    button.textContent = "Saving...";
+    message.textContent = "";
+
+    try {
+        const response = await apiFetch("/api/azure-connection/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(credentials)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.detail || "Unable to save Azure connection."
+            );
+        }
+
+        message.style.color = "var(--green)";
+        message.textContent = "Azure connection configured successfully.";
+
+        document.getElementById("azureClientSecret").value = "";
+
+        form.reset();
+
+        await loadAzureConnectionStatus();
+
+    } catch (error) {
+        message.style.color = "#ff6b6b";
+        message.textContent = error.message;
+    } finally {
+        button.disabled = false;
+        button.textContent = "Save Azure Connection";
+    }
 }
 
 /* DOWNLOAD AUTHENTICATED SECURITY REPORT */
@@ -2537,6 +2773,7 @@ async function loadUserProfile() {
 }
 
 loadUserProfile();
+loadAzureConnectionStatus();
 
 /* SAFE HTML OUTPUT */
 
@@ -4330,6 +4567,76 @@ window.addEventListener("hashchange", () => {
 
 
 </script>
+
+<!-- AZURE CONNECTION MODAL -->
+
+<div class="azure-modal-overlay" id="azureConnectionModal" hidden>
+    <div class="azure-modal">
+
+        <div class="azure-modal-header">
+            <div>
+                <h2>Connect Azure Subscription</h2>
+                <p>Configure your Azure credentials for security scanning.</p>
+            </div>
+
+            <button
+                type="button"
+                class="azure-modal-close"
+                onclick="closeAzureConnectionModal()"
+                aria-label="Close"
+            >
+                &times;
+            </button>
+        </div>
+
+        <form id="azureConnectionForm" onsubmit="saveAzureConnection(event)">
+
+            <label for="azureTenantId">Tenant ID</label>
+            <input
+                type="text"
+                id="azureTenantId"
+                required
+                autocomplete="off"
+                placeholder="Enter Azure Tenant ID"
+            >
+
+            <label for="azureClientId">Client ID</label>
+            <input
+                type="text"
+                id="azureClientId"
+                required
+                autocomplete="off"
+                placeholder="Enter Azure Client ID"
+            >
+
+            <label for="azureClientSecret">Client Secret</label>
+            <input
+                type="password"
+                id="azureClientSecret"
+                required
+                autocomplete="new-password"
+                placeholder="Enter Azure Client Secret"
+            >
+
+            <label for="azureSubscriptionId">Subscription ID</label>
+            <input
+                type="text"
+                id="azureSubscriptionId"
+                required
+                autocomplete="off"
+                placeholder="Enter Azure Subscription ID"
+            >
+
+            <p id="azureConnectionMessage" role="status"></p>
+
+            <button type="submit" id="saveAzureConnectionButton">
+                Save Azure Connection
+            </button>
+
+        </form>
+
+    </div>
+</div>
 
 
 <!-- SECURITY REPORT LOADING OVERLAY -->
