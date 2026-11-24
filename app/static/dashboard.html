@@ -44,8 +44,25 @@ button,input,select {
     font:inherit;
 }
 
-button {
-    cursor:pointer;
+/* Default arrow cursor across the dashboard */
+body,
+body * {
+    cursor: default;
+}
+
+/* Hand cursor for clickable elements */
+a,
+button,
+[role="button"],
+.clickable-scan {
+    cursor: pointer;
+}
+
+/* Text cursor for form fields */
+input,
+textarea,
+[contenteditable="true"] {
+    cursor: text;
 }
 
 a {
@@ -54,20 +71,28 @@ a {
 }
 
 .app {
-    display:flex;
-    min-height:100vh;
+    display: flex;
+    min-height: 100vh;
+    align-items: flex-start;
 }
 
 /* SIDEBAR */
 
 .sidebar {
-    width:255px;
-    flex-shrink:0;
-    background:var(--sidebar);
-    border-right:1px solid var(--border);
-    display:flex;
-    flex-direction:column;
-    padding:25px 16px 18px;
+    width: 255px;
+    flex-shrink: 0;
+    background: var(--sidebar);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 25px 16px 18px;
+
+    /* Keep sidebar visible while scrolling */
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    align-self: flex-start;
+    overflow-y: auto;
 }
 
 .brand {
@@ -4548,6 +4573,53 @@ function initialiseSidebarNavigation() {
 }
 
 initialiseSidebarNavigation();
+
+/* AUTOMATICALLY UPDATE SIDEBAR WHILE SCROLLING */
+
+window.addEventListener("scroll", () => {
+    if (isProgrammaticScrolling) return;
+
+    // Sort sections according to their actual page order
+    const sectionsInPageOrder = [...navigationSections].sort(
+        (a, b) => {
+            const position = a.section.compareDocumentPosition(
+                b.section
+            );
+
+            return position & Node.DOCUMENT_POSITION_FOLLOWING
+                ? -1
+                : 1;
+        }
+    );
+
+    // Find the section closest to the top of the viewport
+    // that has already entered the active area
+    let currentSection = sectionsInPageOrder[0];
+
+    sectionsInPageOrder.forEach(item => {
+        const position = item.section.getBoundingClientRect().top;
+
+        if (position <= 180) {
+            currentSection = item;
+        }
+    });
+
+    // Select the final section when reaching the bottom
+    const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 50;
+
+    if (atBottom) {
+        currentSection = sectionsInPageOrder[
+            sectionsInPageOrder.length - 1
+        ];
+    }
+
+    if (currentSection) {
+        setActiveLink(currentSection.link);
+    }
+
+}, { passive: true });
 
 
 /* BROWSER BACK/FORWARD SUPPORT */
